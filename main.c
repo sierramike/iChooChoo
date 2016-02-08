@@ -240,7 +240,10 @@ void PrintModuleList(struct ModuleIdent* list, int iNbModules)
 			char line[] = "| 0x%02x    |          | 0x%02x |                |\n";
 			sprintf(buf, "%d.%d.%d", list[i].Major, list[i].Minor, list[i].Build);
 			memcpy(line + 14, buf, strlen(buf));
-			memcpy(line + 34, list[i].Description, strlen(list[i].Description));
+			if (list[i].Address == 0x77)
+				memcpy(line + 34, "(new module)", 12);
+			else
+				memcpy(line + 34, list[i].Description, strlen(list[i].Description));
 			printf(line, list[i].Address, list[i].Type);
 		}
 		else
@@ -264,6 +267,7 @@ int PrintHelp(char* executableName)
 	printf("\n");
 	printf("  --version             Print version info\n");
 	printf("  --help                Print this help text\n");
+	printf("  --scan                Scans the i2c bus and reports the list of modules detected\n");
 	printf("  --ident 0xHH          Print module identification on 0xHH address\n");
 	printf("  --setaddr 0xHH        Set new module* address to 0xHH\n");
 	printf("  --settype 0xHH        Set new module* type to 0xHH\n");
