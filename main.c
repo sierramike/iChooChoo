@@ -1,5 +1,6 @@
 #include "header.h"
 #include "main.h"
+#include "daemon.h"
 #include "modconf.h"
 #include "biccp.h"
 
@@ -10,6 +11,7 @@ int main(int argc, char* argv[])
 	{
 		PrintVersion();
 		PrintHelp(argv[0]);
+		return EXIT_SUCCESS;
 	}
 	else if (iReturnCode == 0)
 		return 0;
@@ -24,6 +26,7 @@ int ProcessArguments(int argc, char* argv[])
 	bool bVersion = false;
 	bool bHelp = false;
 	bool bScan = false;
+	bool bDaemon = false;
 	uint8_t iSoftReset = 0;
 	uint8_t iHardReset = 0;
 	uint8_t iGetIdent = 0;
@@ -51,22 +54,26 @@ int ProcessArguments(int argc, char* argv[])
 			{
 				bScan = true;
 			}
-			else if (l = CheckArgumentGetByte(argc, argv, i, "--ident", 1, &iGetIdent))
+			else if (strcmp(argv[i], "--daemon") == 0)
+			{
+				bDaemon = true;
+			}
+			else if (l = CheckArgumentGetByte(argc, argv, i, (char*)"--ident", 1, &iGetIdent))
 			{
 				if (l > 0) i++;
 				else return 0;
 			}
-			else if (l = CheckArgumentGetByte(argc, argv, i, "--setaddr", 1, &iSetAddr))
+			else if (l = CheckArgumentGetByte(argc, argv, i, (char*)"--setaddr", 1, &iSetAddr))
 			{
 				if (l > 0) i++;
 				else return 0;
 			}
-			else if (l = CheckArgumentGetByte(argc, argv, i, "--settype", 1, &iSetType))
+			else if (l = CheckArgumentGetByte(argc, argv, i, (char*)"--settype", 1, &iSetType))
 			{
 				if (l > 0) i++;
 				else return 0;
 			}
-			else if (l = CheckArgumentGetByte(argc, argv, i, "--setdesc", 2, &iSetDesc))
+			else if (l = CheckArgumentGetByte(argc, argv, i, (char*)"--setdesc", 2, &iSetDesc))
 			{
 				if (l > 0)
 				{
@@ -80,12 +87,12 @@ int ProcessArguments(int argc, char* argv[])
 				}
 				else return 0;
 			}
-			else if (l = CheckArgumentGetByte(argc, argv, i, "--softreset", 1, &iSoftReset))
+			else if (l = CheckArgumentGetByte(argc, argv, i, (char*)"--softreset", 1, &iSoftReset))
 			{
 				if (l > 0) i++;
 				else return 0;
 			}
-			else if (l = CheckArgumentGetByte(argc, argv, i, "--hardreset", 1, &iHardReset))
+			else if (l = CheckArgumentGetByte(argc, argv, i, (char*)"--hardreset", 1, &iHardReset))
 			{
 				if (l > 0) i++;
 				else return 0;
@@ -114,6 +121,11 @@ int ProcessArguments(int argc, char* argv[])
 		printf("Argument --scan should be used alone.\n");
 		return 0;
 	}
+	if (bDaemon && argc > 2)
+	{
+		printf("Argument --daemon should be used alone.\n");
+		return 0;
+	}
 
 	if (bVersion)
 	{
@@ -134,6 +146,11 @@ int ProcessArguments(int argc, char* argv[])
 		PrintModuleList(list, iNbModules);
 		free(list);
 		iReturn = 1;
+	}
+
+	if (bDaemon)
+	{
+		return start_daemon();
 	}
 
 	if (iGetIdent)
@@ -268,6 +285,7 @@ int PrintHelp(char* executableName)
 	printf("  --version             Print version info\n");
 	printf("  --help                Print this help text\n");
 	printf("  --scan                Scans the i2c bus and reports the list of modules detected\n");
+	printf("  --daemon              Starts the daemon mode\n");
 	printf("  --ident 0xHH          Print module identification on 0xHH address\n");
 	printf("  --setaddr 0xHH        Set new module* address to 0xHH\n");
 	printf("  --settype 0xHH        Set new module* type to 0xHH\n");

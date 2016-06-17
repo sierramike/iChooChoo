@@ -2,7 +2,9 @@
 
 #define DEBUG
 
+#ifndef _BSD_SOURCE
 #define _BSD_SOURCE // Needed for usleep
+#endif
 
 #include <stdio.h>
 #include <stdint.h>

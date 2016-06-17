@@ -1,30 +1,42 @@
+COMP=g++
 EXEC=iChooChoo
-LIBS=
+LIBS=-lpthread
 LOGTYPE=screen
-OPTIONS=$(LIBS) -std=c99
+OPTIONS=$(LIBS)
+# -std=c99
+
+# SRC=$(wildcard *.c)
+SRC=main.c daemon.c server.c crc16.c i2c.c biccp.c modconf.c log_$(LOGTYPE).c
+OBJ=$(SRC:.c=.o)
+
+BININSTALLDIR=/usr/local/bin
+WWWINSTALLDIR=/var/www/html
 
 all: $(EXEC)
 
-iChooChoo: main.o crc16.o i2c.o biccp.o modconf.o log_$(LOGTYPE).o
-	gcc -o $(EXEC) main.o crc16.o i2c.o biccp.o modconf.o log_$(LOGTYPE).o $(OPTIONS)
+iChooChoo: $(OBJ)
+	$(COMP) -o $@ $^ $(OPTIONS)
 
-main.o: main.c main.h header.h i2c.h modconf.h
-	gcc -o main.o -c main.c $(OPTIONS)
+daemon.h: settings.h
+
+main.o: main.c main.h header.h i2c.h modconf.h daemon.h
+
+daemon.o: daemon.c daemon.h modconf.h
+
+server.o: server.c server.h daemon.h
 
 crc16.o: crc16.c crc16.h header.h
-	gcc -o crc16.o -c crc16.c $(OPTIONS)
 
 i2c.o: i2c.c i2c.h header.h
-	gcc -o i2c.o -c i2c.c $(OPTIONS)
 
 biccp.o: biccp.c biccp.h i2c.h crc16.h header.h
-	gcc -o biccp.o -c biccp.c $(OPTIONS)
 
 modconf.o: modconf.c modconf.h biccp.h log.h
-	gcc -o modconf.o -c modconf.c $(OPTIONS)
 
 log_screen.o: log_screen.c log.h
-	gcc -o log_screen.o -c log_screen.c $(OPTIONS)
+
+%.o: %.c
+	$(COMP) -o $@ -c $< $(OPTIONS)
 
 .PHONY: clean mrproper
 
@@ -35,6 +47,16 @@ mrproper: clean
 	rm -rf $(EXEC)
 
 install: iChooChoo
-	cp iChooChoo /usr/local/bin
-	chown root:root /usr/local/bin/iChooChoo
-	chmod 755 /usr/local/bin/iChooChoo
+ifneq ("$(wildcard $(BININSTALLDIR)/iChooChoo)", "")
+	$(error Application is already installed. Please run 'make uninstall' before.)
+else
+	cp iChooChoo $(BININSTALLDIR)
+	chown root:root $(BININSTALLDIR)/iChooChoo
+	chmod 755 $(BININSTALLDIR)/iChooChoo
+	mkdir $(WWWINSTALLDIR)/iChooChoo
+	cp -r www/* $(WWWINSTALLDIR)/iChooChoo/
+endif
+
+uninstall:
+	rm $(BININSTALLDIR)/iChooChoo
+	rm -r $(WWWINSTALLDIR)/iChooChoo

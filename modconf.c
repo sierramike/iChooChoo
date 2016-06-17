@@ -5,10 +5,10 @@
 
 int ScanBus(struct ModuleIdent** list)
 {
-	uint8_t* moduleList = calloc(0x78, sizeof(uint8_t));
+	uint8_t* moduleList = (uint8_t*)calloc(0x78, sizeof(uint8_t));
 	int iNbModules = BICCP_ScanBus(moduleList);
 
-	*list = calloc(iNbModules, sizeof(struct ModuleIdent));
+	*list = (struct ModuleIdent*)calloc(iNbModules, sizeof(struct ModuleIdent));
 	struct ModuleIdent* myList = *list;
 	int i = 0;
 	for (int l = 0; l < 0x78; l++)
@@ -61,7 +61,7 @@ int ModConfGetIdent2(int addr, struct ModuleIdent* mi)
 	else
 		mi->InfoPresent = false;
 
-	LogMessage(iReturn, "Module identification", addr);
+	LogMessage(iReturn, (char*)"Module identification", addr);
 
 	return iReturn;
 }
@@ -74,7 +74,7 @@ int ModConfSetAddress(int addr, uint8_t newaddr)
 	if (RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_ADDR, 1, newaddr))
 		iReturn = (answer.Data[0] == BICCP_SUCCESS);
 
-	LogMessageAddress(iReturn, "Set address", addr, newaddr);
+	LogMessageAddress(iReturn, (char*)"Set address", addr, newaddr);
 
 	return iReturn;
 }
@@ -87,7 +87,7 @@ int ModConfSetType(int addr, uint8_t type)
 	if (RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_TYPE, 1, type))
 		iReturn = (answer.Data[0] == BICCP_SUCCESS);
 
-	LogMessageInt(iReturn, "Set type", addr, type);
+	LogMessageInt(iReturn, (char*)"Set type", addr, type);
 
 	return iReturn;
 }
@@ -104,12 +104,15 @@ int ModConfSetDescription(int addr, char* desc)
 		i = DESCSIZE;
 	memcpy(data, desc, i);
 
+	for (int i = 0; i < DESCSIZE; i++)
+		if (data[i] == ' ') data[i] = '-';
+
 	if (RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_DESC, 14, data[0], data[1], data[2],
 				data[3], data[4], data[5], data[6], data[7], data[8], data[9],
 				data[10], data[11], data[12], data[13]))
 		iReturn = (answer.Data[0] == BICCP_SUCCESS);
 
-	LogMessageText(iReturn, "Set description", addr, desc);
+	LogMessageText(iReturn, (char*)"Set description", addr, desc);
 
 	return iReturn;
 }
@@ -122,7 +125,7 @@ int ModConfSoftReset(int addr)
 	if (RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_SOFTRST, 0))
 		iReturn = (answer.Data[0] == BICCP_SUCCESS);
 
-	LogMessage(iReturn, "SoftReset", addr);
+	LogMessage(iReturn, (char*)"SoftReset", addr);
 
 	return iReturn;
 }
@@ -135,7 +138,7 @@ int ModConfHardReset(int addr)
 	if (RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_HARDRST, 0))
 		iReturn = (answer.Data[0] == BICCP_SUCCESS);
 
-	LogMessage(iReturn, "HardReset", addr);
+	LogMessage(iReturn, (char*)"HardReset", addr);
 
 	return iReturn;
 }
