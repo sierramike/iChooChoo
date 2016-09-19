@@ -1,15 +1,29 @@
 #pragma once
 
-#define BICCP_ERROR   0x00
-#define BICCP_SUCCESS 0xFF
+#define BICCP_ERROR    0x00
+#define BICCP_SUCCESS  0xFF
 
-#define BICCP_GRP_CONF 0x01
+#define BICCP_GRP_CONF             0x01
 
-#define BICCP_CMD_CONF_IDENT    0x01
-#define BICCP_CMD_CONF_VERSION  0x02
-#define BICCP_CMD_CONF_ADDR     0x10
-#define BICCP_CMD_CONF_TYPE     0x11
-#define BICCP_CMD_CONF_DESC     0x12
-#define BICCP_CMD_CONF_SOFTRST  0xFE
-#define BICCP_CMD_CONF_HARDRST  0xFF
+#define BICCP_CMD_CONF_IDENT       0x01
+#define BICCP_CMD_CONF_VERSION     0x02
+#define BICCP_CMD_CONF_ADDR        0x10
+#define BICCP_CMD_CONF_TYPE        0x11
+#define BICCP_CMD_CONF_DESC        0x12
+#define BICCP_CMD_CONF_SOFTRST     0xFE
+#define BICCP_CMD_CONF_HARDRST     0xFF
+
+#define BICCP_GRP_GENPURP          0x20
+
+#define BICCP_CMD_GENPURP_IDENT    0x01
+#define BICCP_CMD_GENPURP_PRESET   0x10
+#define BICCP_CMD_GENPURP_OUT_STR  0x20
+#define BICCP_CMD_GENPURP_OUT_END  0x2F
+
+#define BICCP_GRP_LIGHT            0x21
+
+#define BICCP_CMD_LIGHT_IDENT      0x01
+#define BICCP_CMD_LIGHT_PRESET     0x10
+#define BICCP_CMD_LIGHT_OUT_STR    0x20
+#define BICCP_CMD_LIGHT_OUT_END    0x2F
 

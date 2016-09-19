@@ -1,22 +1,33 @@
 #include "header.h"
+#include "settings.h"
 #include "main.h"
 #include "daemon.h"
 #include "modconf.h"
 #include "biccp.h"
+#include <iostream>
 
 int main(int argc, char* argv[])
 {
-	int iReturnCode = ProcessArguments(argc, argv);
-	if (iReturnCode == -1)
+	conf = new ConfManager();
+	if (conf->ReadConf(CONFPATH))
 	{
-		PrintVersion();
-		PrintHelp(argv[0]);
-		return EXIT_SUCCESS;
+		int iReturnCode = ProcessArguments(argc, argv);
+		if (iReturnCode == -1)
+		{
+			PrintVersion();
+			PrintHelp(argv[0]);
+			return EXIT_SUCCESS;
+		}
+		else if (iReturnCode == 0)
+			return 0;
+		else
+			return EXIT_SUCCESS;
 	}
-	else if (iReturnCode == 0)
-		return 0;
 	else
-		return EXIT_SUCCESS;
+	{
+		printf("Error detected, exiting...\n");
+		return 0;
+	}
 }
 
 int ProcessArguments(int argc, char* argv[])
@@ -26,6 +37,7 @@ int ProcessArguments(int argc, char* argv[])
 	bool bVersion = false;
 	bool bHelp = false;
 	bool bScan = false;
+	bool bDumpConfig = false;
 	bool bDaemon = false;
 	uint8_t iSoftReset = 0;
 	uint8_t iHardReset = 0;
@@ -53,6 +65,10 @@ int ProcessArguments(int argc, char* argv[])
 			else if (strcmp(argv[i], "--scan") == 0)
 			{
 				bScan = true;
+			}
+			else if (strcmp(argv[i], "--dumpconfig") == 0)
+			{
+				bDumpConfig = true;
 			}
 			else if (strcmp(argv[i], "--daemon") == 0)
 			{
@@ -121,6 +137,11 @@ int ProcessArguments(int argc, char* argv[])
 		printf("Argument --scan should be used alone.\n");
 		return 0;
 	}
+	if (bDumpConfig && argc > 2)
+	{
+		printf("Argument --dumpconfig should be used alone.\n");
+		return 0;
+	}
 	if (bDaemon && argc > 2)
 	{
 		printf("Argument --daemon should be used alone.\n");
@@ -145,6 +166,12 @@ int ProcessArguments(int argc, char* argv[])
 		int iNbModules = ScanBus(&list);
 		PrintModuleList(list, iNbModules);
 		free(list);
+		iReturn = 1;
+	}
+
+	if (bDumpConfig)
+	{
+		conf->Display(std::cout);
 		iReturn = 1;
 	}
 
@@ -286,6 +313,7 @@ int PrintHelp(char* executableName)
 	printf("  --help                Print this help text\n");
 	printf("  --scan                Scans the i2c bus and reports the list of modules detected\n");
 	printf("  --daemon              Starts the daemon mode\n");
+	printf("  --dumpconfig          Dumps the configuration file to the screen (throws an error if the configuration file is wrong\n");
 	printf("  --ident 0xHH          Print module identification on 0xHH address\n");
 	printf("  --setaddr 0xHH        Set new module* address to 0xHH\n");
 	printf("  --settype 0xHH        Set new module* type to 0xHH\n");

@@ -6,6 +6,8 @@
 #define DEBUG
 #define DEBUGDEEP1
 
+#define EMERGENCYSTOP_PIN 2
+
 // 0 = New command to be processed
 // 1 = Command processed, answer not send
 // 2 = Answer sent, ready to receive new command
@@ -23,12 +25,27 @@ void setup() {
 
   EEPROM_ReadSettings();
 
+  memset(bfrIN, 0, PACKETSIZE);
+  memset(bfrOUT, 0, PACKETSIZE);
+  memset(iOutputs, 0, MAXOUTPUTS * sizeof(int));
+
   Wire.begin(cfI2Caddr);
   Wire.onReceive(I2CReceive);
   Wire.onRequest(I2CSend);
 
-  memset(bfrIN, 0, PACKETSIZE);
-  memset(bfrOUT, 0, PACKETSIZE);
+  // Prepare emergency stop
+  pinMode(EMERGENCYSTOP_PIN, INPUT);
+  bEmergencyStop = digitalRead(EMERGENCYSTOP_PIN);
+
+  switch (cfModuleType)
+  {
+    case MODTYPE_GENPURP:
+      setupGenPurp();
+      break;
+    case MODTYPE_LIGHT:
+      setupLight();
+      break;
+  }
 
 #ifdef DEBUG
   Serial.println("Ready!");
@@ -36,35 +53,49 @@ void setup() {
 }
 
 void loop() {
+  bEmergencyStop = digitalRead(EMERGENCYSTOP_PIN);
+  
   if (bCommandProcessed == 0)
   {
 #ifdef DEBUG
-  Serial.print(F("\r\nloop-Command not processed, bfrIN:"));
-  PrintBuffer(bfrIN, PACKETSIZE);
-  Serial.println();
+    Serial.print(F("\r\nloop-Command not processed, bfrIN:"));
+    PrintBuffer(bfrIN, PACKETSIZE);
+    Serial.println();
 #endif
     memset(bfrOUT, 0, PACKETSIZE);
     if (CheckCRC(bfrIN))
     {
 #ifdef DEBUG
-  Serial.println(F("loop-CRC:OK"));
+      Serial.println(F("loop-CRC:OK"));
 #endif
       processCommandConf();
+      processCommandGenPurp();
+      processCommandLight();
       PutCRC(bfrOUT);
       bCommandProcessed = 1;
     }
     else
     {
 #ifdef DEBUG
-  Serial.println(F("loop-CRC:Error, ignoring"));
+      Serial.println(F("loop-CRC:Error, ignoring"));
 #endif
       bCommandProcessed = 2; // We don't want to answer to ignored command
     }
 #ifdef DEBUG
-  Serial.print(F("loop-Command processed, bfrOUT:"));
-  PrintBuffer(bfrOUT, PACKETSIZE);
-  Serial.println();
+    Serial.print(F("loop-Command processed, bfrOUT:"));
+    PrintBuffer(bfrOUT, PACKETSIZE);
+    Serial.println();
 #endif
+  }
+  
+  switch (cfModuleType)
+  {
+    case MODTYPE_GENPURP:
+      loopGenPurp();
+      break;
+    case MODTYPE_LIGHT:
+      loopLight();
+      break;
   }
 
   if (ResetRequest > 0)

@@ -12,7 +12,8 @@ class ModuleIdent {
 
 $types = array(0x10 => 'Traction S',
                0x11 => 'Traction L',
-               0x20 => 'All purpose');
+               0x20 => 'General purpose',
+               0x21 => 'Lighting');
 
 function redirect($url, $permanent = false)
 {

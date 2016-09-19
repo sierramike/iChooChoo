@@ -133,8 +133,11 @@ int ProcessMessage(char* message, char* buffer_out)
 		sscanf(message, "SET_ADDR %02x", &iNewAddr);
 		if (iNewAddr > -1 && iNewAddr < 0x77)
 		{
-			ModConfSetAddress(0x77, iNewAddr);
-			memcpy(buffer_out, "+OK", 3);
+			int iRet = ModConfSetAddress(0x77, iNewAddr);
+			if (iRet != 0)
+				memcpy(buffer_out, "+OK", 3);
+			else
+				memcpy(buffer_out, "-KO", 3);
 			iReturn += 3;
 		}
 		else

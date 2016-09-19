@@ -137,7 +137,7 @@ else
 			<td><?php if ($module->InfoPresent) {
 				if ($module->Address === 0x77) { ?>
 				<select name="newaddress">
-				<?php for ($i = 0; $i < 0x77; $i++) {
+				<?php for ($i = 8; $i < 0x77; $i++) {
 					if (is_null($modules[$i])) { ?>
 					<option value="<?=$i ?>">0x<?php echo dechex($i); ?></option>
 				<?php } } ?>

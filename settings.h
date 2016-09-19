@@ -3,6 +3,8 @@
 
 #define LINUX
 
-#define PORT 999
+#define PORT 1600
+
+#define CONFPATH "/var/local/iChooChoo/iChooChoo.conf"
 
 #endif /* SETTINGS_H */

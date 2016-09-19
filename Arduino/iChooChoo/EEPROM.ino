@@ -3,6 +3,7 @@
 #define EEPROM_SIZE 1024
 #define CONF_VERSION 0x11
 // 0x10 = iChooChoo Conf v1
+// 0x11 = iChooChoo Conf v2
 
 void EEPROM_Erase()
 {
