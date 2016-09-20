@@ -6,6 +6,9 @@
 #include "biccp.h"
 #include <iostream>
 
+ConfManager* conf;
+pthread_mutex_t m_conf = PTHREAD_MUTEX_INITIALIZER;
+
 int main(int argc, char* argv[])
 {
 	conf = new ConfManager();
