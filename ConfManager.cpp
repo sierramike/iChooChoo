@@ -64,9 +64,9 @@ bool ConfManager::ReadConf(const char* path)
 						sscanf(line.c_str(), "MODULE %02x %02x %ms", &iID, &iType, &sDesc);
 						if (iID > -1 && iType > -1)
 						{
-							cConfModule *ccMod = new cConfModule();
+							cConfModule *ccMod = ConfModuleFactory(iType); // new cConfModule();
 							ccMod->setID(iID);
-							ccMod->setType(iType);
+							//ccMod->setType(iType);
 							ccMod->setDescription(sDesc);
 							Modules[iID] = ccMod;
 						}
@@ -258,4 +258,14 @@ void ConfManager::Display(std::ostream &os)
 		os << "SENSOR " << std::hex << std::uppercase << ccSen->getID() << " " << std::hex << std::uppercase << ccSen->getModule()->getID()
 			 << " " << std::hex << ccSen->getIOPort() << " " << std::hex << std::uppercase << ccSen->getType() << " " << ccSen->getDescription() << "\n";
 	}
+}
+
+cConfModule ConfManager::ConfModuleFactory(int type)
+{
+	if (type == BICCP_GRP_TRACTION)
+		return new cConfModuleTraction();
+	else if (type == BICCP_GRP_GENPURP)
+		return new cConfModuleGenPurp();
+	else if (type == BICCP_GRP_LIGHTING)
+		return new cConfModuleLighting();
 }

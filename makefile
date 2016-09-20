@@ -50,7 +50,11 @@ cConfPosition.o : cConfPosition.cpp cConfPosition.hpp cConfElement.hpp
 
 cConfModule.o : cConfModule.cpp cConfModule.hpp cConfElement.hpp
 
+cConfModuleTraction.o : cConfModuleTraction.cpp cConfModuleTraction.hpp cConfModule.hpp cConfElement.hpp biccp.h
+
 cConfModuleGenPurp.o : cConfModuleGenPurp.cpp cConfModuleGenPurp.hpp cConfModule.hpp cConfElement.hpp biccp.h
+
+cConfModuleLighting.o : cConfModuleLighting.cpp cConfModuleLighting.hpp cConfModule.hpp cConfElement.hpp biccp.h
 
 cConfSection.o : cConfSection.cpp cConfSection.hpp cConfModule.hpp cConfModuleAttachedElement.hpp cConfElement.hpp
 

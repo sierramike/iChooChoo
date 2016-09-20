@@ -4,14 +4,14 @@
 #include "cConfModule.hpp"
 #include <string.h>
 
-class cConfModuleGenPurp : public cConfModule
+class cConfModuleLighting : public cConfModule, iConfModuleOnOffOutputs
 {
 	public:
-		cConfModuleGenPurp();
-		~cConfModuleGenPurp();
+		cConfModuleLighting();
+		~cConfModuleLighting();
 		virtual void setOutput(int position, bool value);
 		virtual bool getOutput(int position);
 
 	private:
-		bool _bOutputs[16] = { };
+		bool _bOutputs[10] = { };
 };

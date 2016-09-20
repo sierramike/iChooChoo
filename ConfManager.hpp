@@ -26,4 +26,5 @@ class ConfManager
 		map<int, cConfSensor*> Sensors;
 
 	private:
+		cConfModule ConfModuleFactory(int type);
 };
