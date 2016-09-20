@@ -2,7 +2,7 @@ COMP=g++
 EXEC=iChooChoo
 LIBS=-lpthread
 LOGTYPE=screen
-OPTIONS=$(LIBS)
+OPTIONS=$(LIBS) -std=c++11
 #OPTIONS=$(LIBS) -DVERBOSEDEBUG
 # -std=c99
 
