@@ -135,13 +135,13 @@ int ProcessMessage(char* message, char* buffer_out)
 			}
 			else
 			{
-				memcpy(buffer_out, "-KO", 3);
+				memcpy(buffer_out, "-KO No module at address", 3);
 				iReturn += 3;
 			}
 		}
 		else
 		{
-			memcpy(buffer_out, "-KO", 3);
+			memcpy(buffer_out, "-KO Wrong address", 3);
 			iReturn += 3;
 		}
 	}

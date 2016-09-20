@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 $data = icc_sendreceive("GET_MODULELIST\n");
 //echo $data; /////////////////////////////////////////////////// DEBUG
-if ($data === "") { redirect ($g_root . '/connect_error.php'); }
+if ($data === "") { redirect ($g_root . '/error_connect.php'); }
 
 $modules = read_moduleident_list($data);
 
