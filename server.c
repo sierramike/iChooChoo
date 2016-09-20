@@ -222,7 +222,7 @@ int ProcessMessage(char* message, char* buffer_out)
 	return iReturn;
 }
 
-ModuleIdent*  GetModuleIdent(int addr)
+ModuleIdent* GetModuleIdent(int addr)
 {
 	for (int i = 0; i < _iModuleList; i++)
 	{

@@ -87,7 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	}
 }
 
-$data = icc_sendreceive("GET_MODULE " . $_GET["addr"] . "\n");
+$addr = $_GET["addr"];
+$data = icc_sendreceive("GET_MODULE " . dechex($addr); . "\n");
 //echo $data; /////////////////////////////////////////////////// DEBUG
 if ($data === "") { redirect ($g_root . '/error_connect.php'); }
 if (substr($data, 0, 3) === "-KO") { redirect ($g_root . '/error_comm.php'); }
