@@ -260,7 +260,7 @@ void ConfManager::Display(std::ostream &os)
 	}
 }
 
-cConfModule ConfManager::ConfModuleFactory(int type)
+cConfModule* ConfManager::ConfModuleFactory(int type)
 {
 	if (type == BICCP_GRP_TRACTION)
 		return new cConfModuleTraction();
