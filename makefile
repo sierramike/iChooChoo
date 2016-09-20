@@ -50,7 +50,7 @@ cConfPosition.o : cConfPosition.cpp cConfPosition.hpp cConfElement.hpp
 
 cConfModule.o : cConfModule.cpp cConfModule.hpp cConfElement.hpp
 
-cConfModuleGenPurp.o : cConfModuleGenPurp.cpp cConfModuleGenPurp.hpp cConfModule.hpp cConfElement.hpp biccp.hpp
+cConfModuleGenPurp.o : cConfModuleGenPurp.cpp cConfModuleGenPurp.hpp cConfModule.hpp cConfElement.hpp biccp.h
 
 cConfSection.o : cConfSection.cpp cConfSection.hpp cConfModule.hpp cConfModuleAttachedElement.hpp cConfElement.hpp
 
