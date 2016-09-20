@@ -119,7 +119,20 @@ require '../header.php';
 $data = icc_sendreceive("GET_STATUS " . dechex($addr) . "\n");
 echo $data;
 ?>			
-			
+			<table border="0" cellspacing="0">
+				<tr>
+					<th>Output</th>
+					<th>Status</th>
+					<th>&nbsp;</th>
+				</tr>
+<?php		for ($out_id = 0; $out_id < 16; $out_id++)
+			{ ?>
+				<tr>
+					<td><?php echo dechex($out_id); ?></td>
+					<td><?php if (substr($data, 4 + ($out_id * 2), 1) === "1") { echo "ON"; } else { echo "OFF"; } ?></td>
+					<td>&nbsp;</td>
+				</tr>
+<?php		} ?>
 		</article>
 	</div>
 </section>
