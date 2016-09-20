@@ -114,6 +114,37 @@ int ProcessMessage(char* message, char* buffer_out)
 			iReturn += 3;
 		}
 	}
+	else if (strncmp(message, "GET_MODULE ", 11) == 0)
+	{
+		int iAddr = -1;
+		sscanf(message, "GET_MODULE %02x", &iAddr);
+		if (iAddr > 7 && iAddr < 0x77)
+		{
+			ModuleIdent* mi = GetModuleIdent(iAddr);
+			if (mi != 0)
+			{
+				pthread_mutex_lock(&m_moduleList);
+				memcpy(buffer_out, "+OK", 3);
+				iReturn += 3;
+				iReturn += sprintf(buffer_out + iReturn, " 1");
+
+				iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x %s", mi->Address, mi->Major, mi->Minor,
+					mi->Build, mi->Type, (strlen(mi->Description) == 0 ? "?" : mi->Description));
+
+				pthread_mutex_unlock(&m_moduleList);
+			}
+			else
+			{
+				memcpy(buffer_out, "-KO", 3);
+				iReturn += 3;
+			}
+		}
+		else
+		{
+			memcpy(buffer_out, "-KO", 3);
+			iReturn += 3;
+		}
+	}
 	else if (strncmp(message, "GET_MODULELIST\n", 15) == 0)
 	{
 		pthread_mutex_lock(&m_moduleList);
@@ -131,7 +162,7 @@ int ProcessMessage(char* message, char* buffer_out)
 	{
 		int iNewAddr = -1;
 		sscanf(message, "SET_ADDR %02x", &iNewAddr);
-		if (iNewAddr > -1 && iNewAddr < 0x77)
+		if (iNewAddr > 7 && iNewAddr < 0x77)
 		{
 			int iRet = ModConfSetAddress(0x77, iNewAddr);
 			if (iRet != 0)
@@ -189,4 +220,14 @@ int ProcessMessage(char* message, char* buffer_out)
 	iReturn++;
 	buffer_out[iReturn] = 0;
 	return iReturn;
+}
+
+ModuleIdent*  GetModuleIdent(int addr)
+{
+	for (int i = 0; i < _iModuleList; i++)
+	{
+		if (_moduleList[i].Address == addr)
+			return &(_moduleList[i]);
+	}
+	return 0;
 }
