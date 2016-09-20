@@ -262,10 +262,14 @@ void ConfManager::Display(std::ostream &os)
 
 cConfModule* ConfManager::ConfModuleFactory(int type)
 {
+	cConfModule* ret = 0;
+
 	if (type == BICCP_GRP_TRACTION)
-		return new cConfModuleTraction();
+		ret = new cConfModuleTraction();
 	else if (type == BICCP_GRP_GENPURP)
-		return new cConfModuleGenPurp();
+		ret = new cConfModuleGenPurp();
 	else if (type == BICCP_GRP_LIGHTING)
-		return new cConfModuleLighting();
+		ret = new cConfModuleLighting();
+
+	return ret;
 }
