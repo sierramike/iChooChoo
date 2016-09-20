@@ -11,5 +11,5 @@ class cConfModuleGenPurp : public cConfModule
 		~cConfModuleGenPurp();
 
 	private:
-		bool[16] _bOutputs;
+		bool _bOutputs[16] = { };
 };
