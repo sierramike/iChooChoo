@@ -114,6 +114,36 @@ int ProcessMessage(char* message, char* buffer_out)
 			iReturn += 17;
 		}
 	}
+	else if (strncmp(message, "DO_SETOUT ", 10) == 0)
+	{
+		int iAddr = -1;
+		int iOutput = -1;
+		int iValue = 0;
+		sscanf(message, "DO_SETOUT %02x %02x %d", &iAddr, &iOutput, &iValue);
+		if (iAddr > 7 && iAddr < 0x77)
+		{
+			pthread_mutex_lock(&m_conf);
+			cConfModule* mod = conf->Modules.find(iAddr)->second;
+			iConfModuleOnOffOutputs* = dynamic_cast<iConfModuleOnOffOutputs*>(mod);
+			if (iConfModuleOnOffOutputs != 0)
+			{
+				memcpy(buffer_out, "+OK", 3);
+				iReturn += 3;
+				iReturn += iConfModuleOnOffOutputs->setOutput(iOutput, (iValue != 0));
+			}
+			else
+			{
+				memcpy(buffer_out, "-KO No module at address", 24);
+				iReturn += 24;
+			}
+			pthread_mutex_unlock(&m_conf);
+		}
+		else
+		{
+			memcpy(buffer_out, "-KO Wrong address", 17);
+			iReturn += 17;
+		}
+	}
 	else if (strncmp(message, "GET_STATUS ", 11) == 0)
 	{
 		int iAddr = -1;
