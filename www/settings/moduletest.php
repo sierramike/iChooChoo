@@ -4,10 +4,28 @@ require_once '../load.php';
 $g_title = 'Module Test';
 $err = 0;
 
+$addr = $_GET["addr"];
+
 // If form has been posted, process the request
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
-	if (strlen($_POST["rescan"]) !== 0)
+	if (strlen($_POST["toggleon"]) !== 0)
+	{
+		$output = substr($_POST["toggleon"], 20);
+		echo $output . "->ON";
+		$data = icc_sendreceive("DO_SETOUT " . dechex($addr) . " " . $output . " 1\n");
+		if ($data === "") { redirect ($g_root . '/error_connect.php'); }
+		if ($data[0] === '-') { redirect ($g_root . '/error_comm.php'); }
+	}
+	else if (strlen($_POST["toggleoff"]) !== 0)
+	{
+		$output = substr($_POST["toggleoff"], 20);
+		echo $output . "->OFF";
+		$data = icc_sendreceive("DO_SETOUT " . dechex($addr) . " " . $output . " 0\n");
+		if ($data === "") { redirect ($g_root . '/error_connect.php'); }
+		if ($data[0] === '-') { redirect ($g_root . '/error_comm.php'); }
+	}
+	else if (strlen($_POST["rescan"]) !== 0)
 	{
 		// User requested a bus rescan
 		$data = icc_sendreceive("DO_RESCAN\n");
@@ -87,7 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	}
 }
 
-$addr = $_GET["addr"];
 $data = icc_sendreceive("GET_MODULE " . dechex($addr) . "\n");
 //echo $data; /////////////////////////////////////////////////// DEBUG
 if ($data === "") { redirect ($g_root . '/error_connect.php'); }
@@ -117,8 +134,18 @@ require '../header.php';
 			<p>This page lets you test the module via basic commands.</p>
 <?php
 $data = icc_sendreceive("GET_STATUS " . dechex($addr) . "\n");
+if ($data === "") { redirect ($g_root . '/error_connect.php'); }
+if (substr($data, 0, 3) === "-KO") { redirect ($g_root . '/error_comm.php'); }
 echo $data;
-?>			
+
+$status = array();
+sscanf($data, "+OK %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d", $status[0], $status[1], $status[2], $status[3],
+	$status[4], $status[5], $status[6], $status[7],
+	$status[8], $status[9], $status[10], $status[11],
+	$status[12], $status[13], $status[14], $status[15]);
+
+?>
+			<form method="post" id="frm">
 			<table border="0" cellspacing="0">
 				<tr>
 					<th>Output</th>
@@ -128,11 +155,18 @@ echo $data;
 <?php		for ($out_id = 0; $out_id < 16; $out_id++)
 			{ ?>
 				<tr>
-					<td><?php echo dechex($out_id); ?></td>
-					<td><?php if (substr($data, 4 + ($out_id * 2), 1) === "1") { echo "ON"; } else { echo "OFF"; } ?></td>
-					<td>&nbsp;</td>
+					<td><?php echo strtoupper(dechex($out_id)); ?></td>
+					<?php if ($status[$out_id] == 1) { ?>
+						<td><span class="status_on">ON</span></td>
+						<td><input type="submit" name="toggleoff" value="Set to OFF - Output <?php echo strtoupper(dechex($out_id)); ?>"></td>
+					<?php } else { ?>
+						<td><span class="status_off">OFF</span></td>
+						<td><input type="submit" name="toggleon" value="Set to ON  - Output <?php echo strtoupper(dechex($out_id)); ?>"></td>
+					<?php } ?>
 				</tr>
 <?php		} ?>
+			</table>
+			</form>
 		</article>
 	</div>
 </section>

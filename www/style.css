@@ -16,6 +16,16 @@ h3 {
 	font-size: large;
 }
 
+.status_on {
+	font-weight: bold;
+	color: green;
+}
+
+.status_off {
+	font-weight: bold;
+	color: red;
+}
+
 article, header, footer, nav, section {
 	display: block;
 }
