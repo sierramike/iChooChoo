@@ -133,7 +133,7 @@ int ProcessMessage(char* message, char* buffer_out)
 				memcpy(buffer_out, "-KO No module at address", 24);
 				iReturn += 24;
 			}
-			pthread_mutex_unlock(&m_moduleList);
+			pthread_mutex_unlock(&m_conf);
 		}
 		else
 		{
