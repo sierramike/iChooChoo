@@ -3,6 +3,7 @@
 #include "ConfManager.hpp"
 
 ConfManager* conf;
+extern pthread_mutex_t m_conf;
 
 int ProcessArguments(int argc, char* argv[]);
 

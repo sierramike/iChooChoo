@@ -115,7 +115,11 @@ require '../header.php';
 			<h1>0x<?php echo dechex($module->Address) ?> (<?php echo($types[$module->Type]) ?>): <?=$module->Description ?></h1>
 			<p>&nbsp;</p>
 			<p>This page lets you test the module via basic commands.</p>
-
+<?php
+$data = icc_sendreceive("GET_STATUS " . dechex($addr) . "\n");
+echo $data;
+?>			
+			
 		</article>
 	</div>
 </section>

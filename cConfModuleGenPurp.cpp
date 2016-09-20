@@ -25,3 +25,15 @@ bool cConfModuleGenPurp::getOutput(int position)
 	else
 		return false;
 }
+
+int cConfModuleGenPurp::writeStatus(char* buffer)
+{
+	int iReturn = 0;
+
+	for (int i = 0; i < 16; i++)
+	{
+		iReturn += sprintf(buffer + iReturn, " %d", _bOutputs[i] ? 1 : 0);
+	}
+	
+	return iReturn;
+}

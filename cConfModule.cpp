@@ -21,3 +21,8 @@ int cConfModule::getType()
 {
 	return this->_iType;
 }
+
+int cConfModule::writeStatus(char* buffer)
+{
+	return 0;
+}

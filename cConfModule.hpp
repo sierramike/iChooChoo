@@ -9,6 +9,7 @@ class cConfModule : public cConfElement
 	public:
 		cConfModule();
 		~cConfModule();
+		virtual int writeStatus(char* buffer);
 		virtual void setType(int type);
 		virtual int getType();
 

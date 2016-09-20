@@ -114,6 +114,33 @@ int ProcessMessage(char* message, char* buffer_out)
 			iReturn += 17;
 		}
 	}
+	else if (strncmp(message, "GET_STATUS ", 11) == 0)
+	{
+		int iAddr = -1;
+		sscanf(message, "GET_STATUS %02x", &iAddr);
+		if (iAddr > 7 && iAddr < 0x77)
+		{
+			pthread_mutex_lock(&m_conf);
+			cConfModule* mod = conf->Positions.find(iAddr)->second;
+			if (mod != 0)
+			{
+				memcpy(buffer_out, "+OK", 3);
+				iReturn += 3;
+				iReturn += mod->writeStatus(buffer_out);
+			}
+			else
+			{
+				memcpy(buffer_out, "-KO No module at address", 24);
+				iReturn += 24;
+			}
+			pthread_mutex_unlock(&m_moduleList);
+		}
+		else
+		{
+			memcpy(buffer_out, "-KO Wrong address", 17);
+			iReturn += 17;
+		}
+	}
 	else if (strncmp(message, "GET_MODULE ", 11) == 0)
 	{
 		int iAddr = -1;
