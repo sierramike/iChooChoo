@@ -1,8 +1,12 @@
 #pragma once
 #include <map>
 #include "xstdstring.hpp"
+#include "biccp.h"
 #include "cConfPosition.hpp"
 #include "cConfModule.hpp"
+#include "cConfModuleTraction.hpp"
+#include "cConfModuleGenPurp.hpp"
+#include "cConfModuleLighting.hpp"
 #include "cConfSection.hpp"
 #include "cConfSwitch.hpp"
 #include "cConfRelay.hpp"

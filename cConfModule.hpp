@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cConfElement.hpp"
+#include "biccp.h"
 #include <string.h>
 
 class cConfModule : public cConfElement

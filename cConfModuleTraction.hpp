@@ -1,6 +1,5 @@
 #pragma once
 
-#include "biccp.h"
 #include "cConfModule.hpp"
 #include <string.h>
 
