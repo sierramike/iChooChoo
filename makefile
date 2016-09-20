@@ -111,3 +111,8 @@ installconfig:
 	cp iChooChoo.conf $(CNFINSTALLDIR)
 	chown ichoochoo:ichoochoo $(CNFINSTALLDIR)/iChooChoo.conf
 	chmod 644 $(CNFINSTALLDIR)/iChooChoo.conf
+
+reinstallwww:
+	-rm -r $(WWWINSTALLDIR)/iChooChoo
+	mkdir $(WWWINSTALLDIR)/iChooChoo
+	cp -r www/* $(WWWINSTALLDIR)/iChooChoo/

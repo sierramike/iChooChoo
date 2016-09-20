@@ -88,12 +88,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 }
 
 $addr = $_GET["addr"];
-$data = icc_sendreceive("GET_MODULE " . dechex($addr); . "\n");
+$data = icc_sendreceive("GET_MODULE " . dechex($addr) . "\n");
 //echo $data; /////////////////////////////////////////////////// DEBUG
 if ($data === "") { redirect ($g_root . '/error_connect.php'); }
 if (substr($data, 0, 3) === "-KO") { redirect ($g_root . '/error_comm.php'); }
 
 $modules = read_moduleident_list($data);
+
+//if (is_null($modules)) { redirect ($g_root . '/error_comm.php'); }
+
+$module = array_values($modules)[0];
 
 require '../header.php';
 ?>
@@ -106,21 +110,12 @@ require '../header.php';
 			<p class="invalid"><strong>Error:</strong> An error occured when applying changes. Please try again or contact support if the error persists.</p>
 <?php } else if ($err === 3) { ?>
 			<p class="invalid"><strong>Error:</strong> Please enter a valid description (at least 1 and at most 14 characters, no white space).</p>
-<?php } ?>
-			<p>This page lets you test a module via basic commands.</p>
-<?php
-if (is_null($modules))
-{
-	echo 'Error when reading modules list.';
-}
-else
-{
-//	echo count($modules) . ' module(s) found.<br>';
-?>
-<p>Testing module at address <?=$modules[0]->Address ?>: <?=$modules[0]->Description ?></p>
-<?php
-}
-?>
+<?php }?>
+
+			<h1>0x<?php echo dechex($module->Address) ?> (<?php echo($types[$module->Type]) ?>): <?=$module->Description ?></h1>
+			<p>&nbsp;</p>
+			<p>This page lets you test the module via basic commands.</p>
+
 		</article>
 	</div>
 </section>
