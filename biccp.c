@@ -1,8 +1,4 @@
-#include "header.h"
 #include "biccp.h"
-#include "crc16.h"
-#include "i2c.h"
-#include <stdarg.h>
 
 int Addresses[0x78];
 

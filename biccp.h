@@ -1,5 +1,10 @@
 #pragma once
 
+#include "header.h"
+#include "crc16.h"
+#include "i2c.h"
+#include <stdarg.h>
+
 #define BICCP_ERROR   0x00
 #define BICCP_SUCCESS 0xFF
 
