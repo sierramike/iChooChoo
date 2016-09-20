@@ -76,7 +76,7 @@ int ProcessMessage(char* message, char* buffer_out)
 	{
 		int iAddr = -1;
 		sscanf(message, "DO_HARDRESET %02x", &iAddr);
-		if (iAddr > -1 && iAddr <= 0x77)
+		if (iAddr > 7 && iAddr <= 0x77)
 		{
 			ModConfHardReset(iAddr);
 			memcpy(buffer_out, "+OK", 3);
@@ -84,8 +84,8 @@ int ProcessMessage(char* message, char* buffer_out)
 		}
 		else
 		{
-			memcpy(buffer_out, "-KO", 3);
-			iReturn += 3;
+			memcpy(buffer_out, "-KO Wrong address", 17);
+			iReturn += 17;
 		}
 	}
 	else if (strncmp(message, "DO_RESCAN\n", 10) == 0)
@@ -102,7 +102,7 @@ int ProcessMessage(char* message, char* buffer_out)
 	{
 		int iAddr = -1;
 		sscanf(message, "DO_SOFTRESET %02x", &iAddr);
-		if (iAddr > -1 && iAddr <= 0x77)
+		if (iAddr > 7 && iAddr <= 0x77)
 		{
 			ModConfSoftReset(iAddr);
 			memcpy(buffer_out, "+OK", 3);
@@ -110,8 +110,8 @@ int ProcessMessage(char* message, char* buffer_out)
 		}
 		else
 		{
-			memcpy(buffer_out, "-KO", 3);
-			iReturn += 3;
+			memcpy(buffer_out, "-KO Wrong address", 17);
+			iReturn += 17;
 		}
 	}
 	else if (strncmp(message, "GET_MODULE ", 11) == 0)
@@ -135,14 +135,14 @@ int ProcessMessage(char* message, char* buffer_out)
 			}
 			else
 			{
-				memcpy(buffer_out, "-KO No module at address", 3);
-				iReturn += 3;
+				memcpy(buffer_out, "-KO No module at address", 24);
+				iReturn += 24;
 			}
 		}
 		else
 		{
-			memcpy(buffer_out, "-KO Wrong address", 3);
-			iReturn += 3;
+			memcpy(buffer_out, "-KO Wrong address", 17);
+			iReturn += 17;
 		}
 	}
 	else if (strncmp(message, "GET_MODULELIST\n", 15) == 0)
@@ -173,8 +173,8 @@ int ProcessMessage(char* message, char* buffer_out)
 		}
 		else
 		{
-			memcpy(buffer_out, "-KO", 3);
-			iReturn += 3;
+			memcpy(buffer_out, "-KO Wrong address", 17);
+			iReturn += 17;
 		}
 	}
 	else if (strncmp(message, "SET_DESC ", 9) == 0)
@@ -182,7 +182,7 @@ int ProcessMessage(char* message, char* buffer_out)
 		int iAddr = -1;
 		char* sDesc;
 		sscanf(message, "SET_DESC %02x %ms", &iAddr, &sDesc);
-		if (iAddr > -1 && iAddr < 0x77 && strlen(sDesc) < 15 && strlen(sDesc) > 0)
+		if (iAddr > 7 && iAddr < 0x77 && strlen(sDesc) < 15 && strlen(sDesc) > 0)
 		{
 			ModConfSetDescription(iAddr, sDesc);
 			memcpy(buffer_out, "+OK", 3);
@@ -190,8 +190,8 @@ int ProcessMessage(char* message, char* buffer_out)
 		}
 		else
 		{
-			memcpy(buffer_out, "-KO", 3);
-			iReturn += 3;
+			memcpy(buffer_out, "-KO Wrong address or missing description or description too long", 64);
+			iReturn += 64;
 		}
 		free(sDesc);
 	}
@@ -207,14 +207,14 @@ int ProcessMessage(char* message, char* buffer_out)
 		}
 		else
 		{
-			memcpy(buffer_out, "-KO", 3);
-			iReturn += 3;
+			memcpy(buffer_out, "-KO Wrong type", 14);
+			iReturn += 14;
 		}
 	}
 	else
 	{
-		memcpy(buffer_out, "-KO", 3);
-		iReturn += 3;
+		memcpy(buffer_out, "-KO Wrong command", 17);
+		iReturn += 17;
 	}
 	buffer_out[iReturn] = '\n';
 	iReturn++;
