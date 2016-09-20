@@ -121,7 +121,7 @@ int ProcessMessage(char* message, char* buffer_out)
 		if (iAddr > 7 && iAddr < 0x77)
 		{
 			pthread_mutex_lock(&m_conf);
-			cConfModule* mod = conf->Positions.find(iAddr)->second;
+			cConfModule* mod = conf->Modules.find(iAddr)->second;
 			if (mod != 0)
 			{
 				memcpy(buffer_out, "+OK", 3);

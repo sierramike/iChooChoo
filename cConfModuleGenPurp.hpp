@@ -9,6 +9,7 @@ class cConfModuleGenPurp : public cConfModule
 	public:
 		cConfModuleGenPurp();
 		~cConfModuleGenPurp();
+		virtual int writeStatus(char* buffer) override;
 		virtual void setOutput(int position, bool value);
 		virtual bool getOutput(int position);
 

@@ -28,7 +28,7 @@ main.o: main.c main.h header.h i2c.h modconf.h daemon.h settings.h ConfManager.h
 
 daemon.o: daemon.c daemon.h modconf.h settings.h
 
-server.o: server.c server.h daemon.h
+server.o: server.c server.h daemon.h main.h
 
 crc16.o: crc16.c crc16.h header.h
 
