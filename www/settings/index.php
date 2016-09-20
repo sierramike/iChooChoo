@@ -119,6 +119,7 @@ require '../header.php';
 					<th>&nbsp;</th>
 					<th>&nbsp;</th>
 					<th>&nbsp;</th>
+					<th>&nbsp;</th>
 				</tr>
 <?php
 if (is_null($modules))
@@ -167,6 +168,7 @@ else
 					else { ?>(Unknown module)<?php }
 				} ?></td>
 			<td><?php if ($module->InfoPresent) { ?><input type="submit" name="save" value="Save"><?php } ?></td>
+			<td><?php if ($module->InfoPresent) { ?><a href="moduletest.php?addr=<?=$module->Address ?>" class="button buttongreen">Test</a><?php } ?></td>
 			<td><?php if ($module->InfoPresent) { ?><input type="submit" name="softreset" value="Soft-Reset"><?php } ?></td>
 			<td><?php if ($module->InfoPresent && $module->Address !== 0x77 && is_null($modules[0x77])) { ?><input type="submit" name="hardreset" value="Hard-Reset"><?php } ?></td>
 		</tr>
