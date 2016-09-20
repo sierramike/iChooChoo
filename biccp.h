@@ -3,7 +3,8 @@
 #define BICCP_ERROR   0x00
 #define BICCP_SUCCESS 0xFF
 
-#define BICCP_GRP_CONF 0x01
+#define BICCP_GRP_CONF          0x01
+#define BICCP_GRP_GENPURP       0x20
 
 #define BICCP_CMD_CONF_IDENT    0x01
 #define BICCP_CMD_CONF_VERSION  0x02
