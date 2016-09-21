@@ -124,12 +124,12 @@ int ProcessMessage(char* message, char* buffer_out)
 		{
 			pthread_mutex_lock(&m_conf);
 			cConfModule* mod = conf->Modules.find(iAddr)->second;
-			iConfModuleOnOffOutputs* = dynamic_cast<iConfModuleOnOffOutputs*>(mod);
-			if (iConfModuleOnOffOutputs != 0)
+			iConfModuleOnOffOutputs* modOnOff = dynamic_cast<iConfModuleOnOffOutputs*>(mod);
+			if (modOnOff != 0)
 			{
 				memcpy(buffer_out, "+OK", 3);
 				iReturn += 3;
-				iReturn += iConfModuleOnOffOutputs->setOutput(iOutput, (iValue != 0));
+				modOnOff->setOutput(iOutput, (iValue != 0));
 			}
 			else
 			{
@@ -156,7 +156,7 @@ int ProcessMessage(char* message, char* buffer_out)
 			{
 				memcpy(buffer_out, "+OK", 3);
 				iReturn += 3;
-				iReturn += mod->writeStatus(buffer_out);
+				iReturn += mod->writeStatus(buffer_out + iReturn);
 			}
 			else
 			{

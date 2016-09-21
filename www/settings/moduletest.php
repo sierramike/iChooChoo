@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	if (strlen($_POST["toggleon"]) !== 0)
 	{
 		$output = substr($_POST["toggleon"], 20);
-		echo $output . "->ON";
 		$data = icc_sendreceive("DO_SETOUT " . dechex($addr) . " " . $output . " 1\n");
 		if ($data === "") { redirect ($g_root . '/error_connect.php'); }
 		if ($data[0] === '-') { redirect ($g_root . '/error_comm.php'); }
@@ -20,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	else if (strlen($_POST["toggleoff"]) !== 0)
 	{
 		$output = substr($_POST["toggleoff"], 20);
-		echo $output . "->OFF";
 		$data = icc_sendreceive("DO_SETOUT " . dechex($addr) . " " . $output . " 0\n");
 		if ($data === "") { redirect ($g_root . '/error_connect.php'); }
 		if ($data[0] === '-') { redirect ($g_root . '/error_comm.php'); }
@@ -136,7 +134,6 @@ require '../header.php';
 $data = icc_sendreceive("GET_STATUS " . dechex($addr) . "\n");
 if ($data === "") { redirect ($g_root . '/error_connect.php'); }
 if (substr($data, 0, 3) === "-KO") { redirect ($g_root . '/error_comm.php'); }
-echo $data;
 
 $status = array();
 sscanf($data, "+OK %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d", $status[0], $status[1], $status[2], $status[3],
