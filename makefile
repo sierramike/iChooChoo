@@ -62,7 +62,7 @@ else
 	groupadd ichoochoo
 	useradd -g ichoochoo ichoochoo
 	usermod --groups spi,i2c,gpio,ichoochoo ichoochoo
-	cp ./init.d/iChooChoo /etc/init.d/iChooChoo
+	cp ./initd/iChooChoo /etc/init.d/iChooChoo
 	chmod 0755 /etc/init.d/iChooChoo
 	systemctl daemon-reload
 	update-rc.d iChooChoo defaults
