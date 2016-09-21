@@ -1,68 +1,39 @@
-COMP=g++
-EXEC=iChooChoo
-LIBS=-lpthread
-LOGTYPE=screen
-OPTIONS=$(LIBS) -std=c++11
-#OPTIONS=$(LIBS) -DVERBOSEDEBUG
+COMP:=g++
+EXEC:=iChooChoo
+LIBS:=-lpthread
+LOGTYPE:=screen
+OPTIONS:=$(LIBS) -std=c++11 -MMD -MP
+#OPTIONS:=$(LIBS) -DVERBOSEDEBUG
 # -std=c99
 
-# SRC=$(wildcard *.c)
-SRCPP=$(wildcard *.cpp)
-#SRC=main.c daemon.c server.c crc16.c i2c.c biccp.c modconf.c log_$(LOGTYPE).c ConfManager.cpp cConfElement.cpp cConfPosition.cpp cConfPosition.cpp cConfModule.cpp cConfSection.cpp
-SRC=main.c daemon.c server.c crc16.c i2c.c biccp.c modconf.c log_$(LOGTYPE).c $(SRCPP)
-OBJ0=$(SRC:.cpp=.o)
-OBJ=$(OBJ0:.c=.o)
+SRC:=$(wildcard *.c)
+SRC:=$(filter-out log_*.c, $(SRC))
+SRC:=$(SRC) $(wildcard *.cpp)
+SRC:=$(SRC) log_$(LOGTYPE).c
 
-BININSTALLDIR=/usr/local/bin
-WWWINSTALLDIR=/var/www/html
-CNFINSTALLDIR=/var/local/iChooChoo
+OBJ:=$(SRC:.cpp=.o)
+OBJ:=$(OBJ:.c=.o)
+
+DPD:=$(OBJ:.o=.d)
+
+## SRC=$(wildcard *.c)
+#SRCPP=$(wildcard *.cpp)
+##SRC=main.c daemon.c server.c crc16.c i2c.c biccp.c modconf.c log_$(LOGTYPE).c ConfManager.cpp cConfElement.cpp cConfPosition.cpp cConfPosition.cpp cConfModule.cpp cConfSection.cpp
+#SRC=main.c daemon.c server.c crc16.c i2c.c biccp.c modconf.c log_$(LOGTYPE).c $(SRCPP)
+#OBJ0=$(SRC:.cpp=.o)
+#OBJ=$(OBJ0:.c=.o)
+#DPD=$(OBJ:.o=.d)
+
+BININSTALLDIR:=/usr/local/bin
+WWWINSTALLDIR:=/var/www/html
+CNFINSTALLDIR:=/var/local/iChooChoo
 
 all: $(EXEC)
 
 iChooChoo: $(OBJ)
 	$(COMP) -o $@ $^ $(OPTIONS)
 
-daemon.h: settings.h
-
-main.o: main.c main.h header.h i2c.h modconf.h daemon.h settings.h ConfManager.hpp
-
-daemon.o: daemon.c daemon.h modconf.h settings.h
-
-server.o: server.c server.h daemon.h main.h
-
-crc16.o: crc16.c crc16.h header.h
-
-i2c.o: i2c.c i2c.h header.h
-
-biccp.o: biccp.c biccp.h i2c.h crc16.h header.h
-
-modconf.o: modconf.c modconf.h biccp.h log.h
-
-log_screen.o: log_screen.c log.h
-
-ConfManager.o : ConfManager.hpp cConfPosition.hpp cConfModule.hpp cConfSection.hpp cConfSwitch.hpp cConfRelay.hpp cConfSensor.hpp xstdstring.hpp
-
-cConfElement.o : cConfElement.cpp cConfElement.hpp
-
-cConfModuleAttachedElement.o : cConfModuleAttachedElement.cpp cConfModuleAttachedElement.hpp cConfElement.hpp
-
-cConfPosition.o : cConfPosition.cpp cConfPosition.hpp cConfElement.hpp
-
-cConfModule.o : cConfModule.cpp cConfModule.hpp cConfElement.hpp
-
-cConfModuleTraction.o : cConfModuleTraction.cpp cConfModuleTraction.hpp cConfModule.hpp cConfElement.hpp biccp.h
-
-cConfModuleGenPurp.o : cConfModuleGenPurp.cpp cConfModuleGenPurp.hpp cConfModule.hpp cConfElement.hpp biccp.h IConfModuleOnOffOutputs.hpp
-
-cConfModuleLighting.o : cConfModuleLighting.cpp cConfModuleLighting.hpp cConfModule.hpp cConfElement.hpp biccp.h IConfModuleOnOffOutputs.hpp
-
-cConfSection.o : cConfSection.cpp cConfSection.hpp cConfModule.hpp cConfModuleAttachedElement.hpp cConfElement.hpp
-
-cConfSwitch.o : cConfSwitch.cpp cConfSwitch.hpp cConfModule.hpp cConfModuleAttachedElement.hpp cConfElement.hpp
-
-cConfRelay.o : cConfRelay.cpp cConfRelay.hpp cConfModule.hpp cConfModuleAttachedElement.hpp cConfElement.hpp
-
-cConfSensor.o : cConfSensor.cpp cConfSensor.hpp cConfModule.hpp cConfModuleAttachedElement.hpp cConfElement.hpp
+-include $(DPD)
 
 %.o: %.c
 	$(COMP) -o $@ -c $< $(OPTIONS)
@@ -74,6 +45,7 @@ cConfSensor.o : cConfSensor.cpp cConfSensor.hpp cConfModule.hpp cConfModuleAttac
 
 clean:
 	rm -rf *.o
+	rm -rf *.d
 
 mrproper: clean
 	rm -rf $(EXEC)

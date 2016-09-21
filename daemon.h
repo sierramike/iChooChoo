@@ -1,5 +1,4 @@
-#ifndef DAEMON_H
-#define DAEMON_H
+#pragma once
 
 #include "settings.h"
 
@@ -54,5 +53,3 @@ typedef struct
 	socklen_t addr_len;
 //	int addr_len;
 } connection_t;
-
-#endif /* DAEMON_H */

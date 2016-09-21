@@ -1,6 +1,7 @@
 #pragma once
 
 #include "main.h"
+#include "IConfModuleOnOffOutputs.hpp"
 
 void* ServerThread(void* ptr);
 bool CheckMessage (char* message, int size);

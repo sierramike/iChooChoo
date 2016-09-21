@@ -124,7 +124,7 @@ int ProcessMessage(char* message, char* buffer_out)
 		{
 			pthread_mutex_lock(&m_conf);
 			cConfModule* mod = conf->Modules.find(iAddr)->second;
-			iConfModuleOnOffOutputs* modOnOff = dynamic_cast<iConfModuleOnOffOutputs*>(mod);
+			IConfModuleOnOffOutputs* modOnOff = dynamic_cast<IConfModuleOnOffOutputs*>(mod);
 			if (modOnOff != 0)
 			{
 				memcpy(buffer_out, "+OK", 3);
