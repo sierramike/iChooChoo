@@ -2,6 +2,7 @@
 #include <map>
 #include "xstdstring.hpp"
 #include "biccp.h"
+#include "log.h"
 #include "cConfPosition.hpp"
 #include "cConfModule.hpp"
 #include "cConfModuleTraction.hpp"

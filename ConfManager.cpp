@@ -326,6 +326,7 @@ cConfModule* ConfManager::GetModuleIdent(int addr)
 {
 	cConfModule* module = 0;
 	union BICCP_Data answer;
+	int iSuccess = 0;
 
 	if(RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_VERSION, 0))
 	{
@@ -343,6 +344,7 @@ cConfModule* ConfManager::GetModuleIdent(int addr)
 			memcpy(cDescription, answer.Data + 2, DESCSIZE);
 			cDescription[DESCSIZE] = 0;
 			module->setDescription((const char*)&cDescription);
+			iSuccess = true;
 		}
 		else
 			module = new cConfModule();
@@ -350,7 +352,7 @@ cConfModule* ConfManager::GetModuleIdent(int addr)
 	else
 		module = new cConfModule();
 
-	LogMessage(iReturn, (char*)"Module identification", addr);
+	LogMessage(iSuccess, (char*)"Module identification", addr);
 
 	return module;
 }
