@@ -259,7 +259,7 @@ int ProcessMessage(char* message, char* buffer_out)
 		iReturn += sprintf(buffer_out + iReturn, " %d", conf->Modules.size());
 
 		typedef std::map<int, cConfModule*>::iterator it_mod;
-		for(it_mod iterator = Modules.begin(); iterator != Modules.end(); ++iterator)
+		for(it_mod iterator = conf->Modules.begin(); iterator != conf->Modules.end(); ++iterator)
 		{
 			cConfModule* ccMod = iterator->second;
 			iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x %s", ccMod->getID(), ccMod->getMajor(), ccMod->getMinor(),
