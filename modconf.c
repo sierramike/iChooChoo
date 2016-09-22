@@ -3,7 +3,7 @@
 #include "biccp.h"
 #include "log.h"
 
-int ScanBus(struct ModuleIdent** list)
+/*int ScanBus(struct ModuleIdent** list)
 {
 	uint8_t* moduleList = (uint8_t*)calloc(0x78, sizeof(uint8_t));
 	int iNbModules = BICCP_ScanBus(moduleList);
@@ -25,16 +25,16 @@ int ScanBus(struct ModuleIdent** list)
 	free(moduleList);
 
 	return i;
-}
+}*/
 
-struct ModuleIdent ModConfGetIdent(int addr)
+/*struct ModuleIdent ModConfGetIdent(int addr)
 {
 	struct ModuleIdent mi;
 	ModConfGetIdent2(addr, &mi);
 	return mi;
-}
+}*/
 
-int ModConfGetIdent2(int addr, struct ModuleIdent* mi)
+/*int ModConfGetIdent2(int addr, struct ModuleIdent* mi)
 {
 	int iReturn = 0;
 	union BICCP_Data answer;
@@ -64,7 +64,7 @@ int ModConfGetIdent2(int addr, struct ModuleIdent* mi)
 	LogMessage(iReturn, (char*)"Module identification", addr);
 
 	return iReturn;
-}
+}*/
 
 int ModConfSetAddress(int addr, uint8_t newaddr)
 {

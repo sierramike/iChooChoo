@@ -13,6 +13,8 @@ int CheckArgumentGetByte(int argc, char* argv[], int argi, char* argname, int np
 
 void PrintModuleList(struct ModuleIdent* list, int iNbModules);
 
+void PrintModuleList();
+
 int PrintVersion();
 
 int PrintHelp(char* executableName);

@@ -31,4 +31,6 @@ class ConfManager
 
 	private:
 		cConfModule* ConfModuleFactory(int type);
+		cConfModule* GetModuleIdent(int addr);
+		int ScanBus();
 };

@@ -40,11 +40,11 @@ void init_daemon();
 #include <string.h>
 #include <pthread.h>
 
-#include "modconf.h"
+//#include "modconf.h"
 
-extern struct ModuleIdent* _moduleList;
-extern int _iModuleList;
-extern pthread_mutex_t m_moduleList;
+//extern struct ModuleIdent* _moduleList;
+//extern int _iModuleList;
+//extern pthread_mutex_t m_moduleList;
 
 typedef struct
 {

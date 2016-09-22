@@ -1,9 +1,9 @@
 #include "daemon.h"
 #include "server.h"
 
-struct ModuleIdent* _moduleList;
-int _iModuleList;
-pthread_mutex_t m_moduleList = PTHREAD_MUTEX_INITIALIZER;
+//struct ModuleIdent* _moduleList;
+//int _iModuleList;
+//pthread_mutex_t m_moduleList = PTHREAD_MUTEX_INITIALIZER;
 
 int start_daemon()
 {
@@ -92,7 +92,7 @@ int start_daemon()
 
 void init_daemon()
 {
-	pthread_mutex_lock(&m_moduleList);
-	_iModuleList = ScanBus(&_moduleList);
-	pthread_mutex_unlock(&m_moduleList);
+//	pthread_mutex_lock(&m_moduleList);
+//	_iModuleList = ScanBus(&_moduleList);
+//	pthread_mutex_unlock(&m_moduleList);
 }

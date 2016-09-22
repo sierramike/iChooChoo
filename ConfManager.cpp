@@ -16,6 +16,8 @@ bool ConfManager::ReadConf(const char* path)
 	string myLine, myMotionLine;
 	int iLine = 0;
 
+	ScanBus();
+	
 	ifstream myfile(path);
 	if (myfile.is_open())
 	{
@@ -210,24 +212,24 @@ void ConfManager::Display(std::ostream &os)
 		os << "POSITION " << std::hex << std::uppercase << ccPos->getID() << " " << ccPos->getDescription() << "\n";
 	}
 
-	os << "\n";
-	os << "#MODULE ID TYPE DESCRIPTION\n";
-	typedef std::map<int, cConfModule*>::iterator it_mod;
-	for(it_mod iterator = Modules.begin(); iterator != Modules.end(); ++iterator)
-	{
-		cConfModule* ccMod = iterator->second;
-		os << "MODULE " << std::hex << std::uppercase << ccMod->getID() << " " << std::hex << std::uppercase << ccMod->getType() << " " << ccMod->getDescription() << "\n";
-	}
-
 //	os << "\n";
-//	os << "#SECTION ID MODULE_ID OUTPUT DESCRIPTION\n";
-//	typedef std::map<int, cConfSection*>::iterator it_sec;
-//	for(it_sec iterator = Sections.begin(); iterator != Sections.end(); ++iterator)
+//	os << "#MODULE ID TYPE DESCRIPTION\n";
+//	typedef std::map<int, cConfModule*>::iterator it_mod;
+//	for(it_mod iterator = Modules.begin(); iterator != Modules.end(); ++iterator)
 //	{
-//		cConfSection* ccSec = iterator->second;
-//		os << "SECTION " << std::hex << std::uppercase << ccSec->getID() << " " << std::hex << std::uppercase << ccSec->getModule()->getID()
-//			 << " " << std::hex << ccSec->getIOPort() << " " << ccSec->getDescription() << "\n";
+//		cConfModule* ccMod = iterator->second;
+//		os << "MODULE " << std::hex << std::uppercase << ccMod->getID() << " " << std::hex << std::uppercase << ccMod->getType() << " " << ccMod->getDescription() << "\n";
 //	}
+
+	os << "\n";
+	os << "#SECTION ID MODULE_ID OUTPUT DESCRIPTION\n";
+	typedef std::map<int, cConfSection*>::iterator it_sec;
+	for(it_sec iterator = Sections.begin(); iterator != Sections.end(); ++iterator)
+	{
+		cConfSection* ccSec = iterator->second;
+		os << "SECTION " << std::hex << std::uppercase << ccSec->getID() << " " << std::hex << std::uppercase << ccSec->getModule()->getID()
+			 << " " << std::hex << ccSec->getIOPort() << " " << ccSec->getDescription() << "\n";
+	}
 
 	os << "\n";
 	os << "#SWITCH ID MODULE_ID OUTPUT STRAIGHTVALUE DESCRIPTION\n";
@@ -272,4 +274,71 @@ cConfModule* ConfManager::ConfModuleFactory(int type)
 		ret = new cConfModuleLighting();
 
 	return ret;
+}
+
+int ConfManager::ScanBus()
+{
+	uint8_t* moduleList = (uint8_t*)calloc(0x78, sizeof(uint8_t));
+	int iNbModules = BICCP_ScanBus(moduleList);
+
+	*list = (struct ModuleIdent*)calloc(iNbModules, sizeof(struct ModuleIdent));
+	struct ModuleIdent* myList = *list;
+	int i = 0;
+	for (int l = 0; l < 0x78; l++)
+	{
+		if (moduleList[l] > 0)
+		{
+			cConfModule* ccMod = GetModuleIdent(l);
+			if (ccMod == 0)
+			{
+				usleep(10000);
+				ccMod = GetModuleIdent(l);
+			}
+			if (ccMod != 0)
+			{
+				ccMod->setID(l);
+				Modules[iID] = ccMod;
+			}
+			i++;
+		}
+	}
+
+	free(moduleList);
+
+	return i;
+}
+
+cConfModule* ConfManager::GetModuleIdent(int addr)
+{
+	cConfModule* module = null;
+	union BICCP_Data answer;
+
+	mi->Address = addr;
+
+	if(RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_VERSION, 0))
+	{
+		int iMajor = answer.Data[0];
+		int iMinor = answer.Data[1];
+		int iBuild = answer.Data[2];
+		if (RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_IDENT, 0))
+		{
+			module = ConfModuleFactory(answer.Data[1]);
+			module->setMajor(iMajor);
+			module->setMinor(iMinor);
+			module->setBuild(iBuild);
+			
+			char cDescription[DESCSIZE + 1];
+			memcpy(cDescription, answer.Data + 2, DESCSIZE);
+			cDescription[DESCSIZE] = 0;
+			module->setDescription(&cDescription);
+		}
+		else
+			module = new cConfModule();
+	}
+	else
+		module = new cConfModule();
+
+	LogMessage(iReturn, (char*)"Module identification", addr);
+
+	return module;
 }

@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		printf("Error detected, exiting...\n");
+		printf("Error detected while reading configuration file, exiting...\n");
 		return 0;
 	}
 }
@@ -165,10 +165,11 @@ int ProcessArguments(int argc, char* argv[])
 
 	if (bScan)
 	{
-		struct ModuleIdent* list;
-		int iNbModules = ScanBus(&list);
-		PrintModuleList(list, iNbModules);
-		free(list);
+//		struct ModuleIdent* list;
+//		int iNbModules = ScanBus(&list);
+//		PrintModuleList(list, iNbModules);
+//		free(list);
+		PrintModuleList();
 		iReturn = 1;
 	}
 
@@ -296,6 +297,38 @@ void PrintModuleList(struct ModuleIdent* list, int iNbModules)
 		else
 		{
 			printf("| 0x%02x    |    --    |  --  | (unidentified) |\n", list[i].Address);
+		}
+	}
+	printf("+---------+----------+------+----------------+\n");
+}
+
+void PrintModuleList()
+{
+	printf("\nBus scan complete: %d modules found.\n\n", conf->Modules.size());
+	printf("+---------+----------+------+----------------+\n");
+	printf("| Address | Version  | Type | Description    |\n");
+	printf("+---------+----------+------+----------------+\n");
+
+	typedef std::map<int, cConfModule*>::iterator it_mod;
+	for(it_mod iterator = conf->Modules.begin(); iterator != conf->Modules.end(); ++iterator)
+	{
+		cConfModule* ccMod = iterator->second;
+
+		char buf[9] = "        ";
+		if (ccMod->getType() != 0)
+		{
+			char line[] = "| 0x%02x    |          | 0x%02x |                |\n";
+			sprintf(buf, "%d.%d.%d", ccMod->getMajor(), ccMod->getMinor(), ccMod->getBuild());
+			memcpy(line + 14, buf, strlen(buf));
+			if (ccMod->getID() == 0x77)
+				memcpy(line + 34, "(new module)", 12);
+			else
+				memcpy(line + 34, ccMod->getDescription(), strlen(ccMod->getDescription()));
+			printf(line, ccMod->getID(), ccMod->getType());
+		}
+		else
+		{
+			printf("| 0x%02x    |    --    |  --  | (unidentified) |\n", ccMod->getID());
 		}
 	}
 	printf("+---------+----------+------+----------------+\n");

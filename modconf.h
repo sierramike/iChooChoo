@@ -2,11 +2,11 @@
 
 #include "header.h"
 
-int ScanBus(struct ModuleIdent** list);
+//int ScanBus(struct ModuleIdent** list);
 
-struct ModuleIdent ModConfGetIdent(int addr);
+//struct ModuleIdent ModConfGetIdent(int addr);
 
-int ModConfGetIdent2(int addr, struct ModuleIdent* mi);
+//int ModConfGetIdent2(int addr, struct ModuleIdent* mi);
 
 int ModConfSetAddress(int addr, uint8_t newaddr);
 
