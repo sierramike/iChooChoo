@@ -1,6 +1,7 @@
 #pragma once
 
 #include "main.h"
+#include "modconf.h"
 #include "IConfModuleOnOffOutputs.hpp"
 #include "IConfModuleDimmableOutputs.hpp"
 
