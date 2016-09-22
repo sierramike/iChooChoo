@@ -299,7 +299,7 @@ int ConfManager::ScanBus()
 			if (ccMod != 0)
 			{
 				ccMod->setID(l);
-				Modules[iID] = ccMod;
+				Modules[l] = ccMod;
 			}
 			i++;
 		}
@@ -319,15 +319,13 @@ void ConfManager::ClearModules()
 		delete ccMod;
 		iterator->second = 0;
 	}
-	conf->Modules.clear();
+	Modules.clear();
 }
 
 cConfModule* ConfManager::GetModuleIdent(int addr)
 {
-	cConfModule* module = null;
+	cConfModule* module = 0;
 	union BICCP_Data answer;
-
-	mi->Address = addr;
 
 	if(RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_VERSION, 0))
 	{
@@ -344,7 +342,7 @@ cConfModule* ConfManager::GetModuleIdent(int addr)
 			char cDescription[DESCSIZE + 1];
 			memcpy(cDescription, answer.Data + 2, DESCSIZE);
 			cDescription[DESCSIZE] = 0;
-			module->setDescription(&cDescription);
+			module->setDescription((const char*)&cDescription);
 		}
 		else
 			module = new cConfModule();
