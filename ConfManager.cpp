@@ -56,27 +56,27 @@ bool ConfManager::ReadConf(const char* path)
 						}
 						free(sDesc);
 					}
-					else if (line.compare(0, 7, "MODULE ") == 0)
-					{
-						int iID = -1;
-						int iType = -1;
-						char* sDesc;
-						sscanf(line.c_str(), "MODULE %02x %02x %ms", &iID, &iType, &sDesc);
-						if (iID > -1 && iType > -1)
-						{
-							cConfModule *ccMod = ConfModuleFactory(iType); // new cConfModule();
-							ccMod->setID(iID);
-							//ccMod->setType(iType);
-							ccMod->setDescription(sDesc);
-							Modules[iID] = ccMod;
-						}
-						else
-						{
-							bReturn = false;
-							printf("Configuration error: syntax error at line %d '%s'\n", iLine, line.c_str());
-						}
-						free(sDesc);
-					}
+//					else if (line.compare(0, 7, "MODULE ") == 0)
+//					{
+//						int iID = -1;
+//						int iType = -1;
+//						char* sDesc;
+//						sscanf(line.c_str(), "MODULE %02x %02x %ms", &iID, &iType, &sDesc);
+//						if (iID > -1 && iType > -1)
+//						{
+//							cConfModule *ccMod = ConfModuleFactory(iType); // new cConfModule();
+//							ccMod->setID(iID);
+//							//ccMod->setType(iType);
+//							ccMod->setDescription(sDesc);
+//							Modules[iID] = ccMod;
+//						}
+//						else
+//						{
+//							bReturn = false;
+//							printf("Configuration error: syntax error at line %d '%s'\n", iLine, line.c_str());
+//						}
+//						free(sDesc);
+//					}
 					else if (line.compare(0, 8, "SECTION ") == 0)
 					{
 						int iID = -1;
@@ -219,15 +219,15 @@ void ConfManager::Display(std::ostream &os)
 		os << "MODULE " << std::hex << std::uppercase << ccMod->getID() << " " << std::hex << std::uppercase << ccMod->getType() << " " << ccMod->getDescription() << "\n";
 	}
 
-	os << "\n";
-	os << "#SECTION ID MODULE_ID OUTPUT DESCRIPTION\n";
-	typedef std::map<int, cConfSection*>::iterator it_sec;
-	for(it_sec iterator = Sections.begin(); iterator != Sections.end(); ++iterator)
-	{
-		cConfSection* ccSec = iterator->second;
-		os << "SECTION " << std::hex << std::uppercase << ccSec->getID() << " " << std::hex << std::uppercase << ccSec->getModule()->getID()
-			 << " " << std::hex << ccSec->getIOPort() << " " << ccSec->getDescription() << "\n";
-	}
+//	os << "\n";
+//	os << "#SECTION ID MODULE_ID OUTPUT DESCRIPTION\n";
+//	typedef std::map<int, cConfSection*>::iterator it_sec;
+//	for(it_sec iterator = Sections.begin(); iterator != Sections.end(); ++iterator)
+//	{
+//		cConfSection* ccSec = iterator->second;
+//		os << "SECTION " << std::hex << std::uppercase << ccSec->getID() << " " << std::hex << std::uppercase << ccSec->getModule()->getID()
+//			 << " " << std::hex << ccSec->getIOPort() << " " << ccSec->getDescription() << "\n";
+//	}
 
 	os << "\n";
 	os << "#SWITCH ID MODULE_ID OUTPUT STRAIGHTVALUE DESCRIPTION\n";

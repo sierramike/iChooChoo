@@ -127,9 +127,53 @@ int ProcessMessage(char* message, char* buffer_out)
 			IConfModuleOnOffOutputs* modOnOff = dynamic_cast<IConfModuleOnOffOutputs*>(mod);
 			if (modOnOff != 0)
 			{
-				memcpy(buffer_out, "+OK", 3);
-				iReturn += 3;
-				modOnOff->setOutput(iOutput, (iValue != 0));
+				if (modOnOff->setOutput(iOutput, (iValue != 0)))
+				{
+					memcpy(buffer_out, "+OK", 3);
+					iReturn += 3;
+				}
+				else
+				{
+					memcpy(buffer_out, "-KO Error writing to module", 27);
+					iReturn += 27;
+				}
+			}
+			else
+			{
+				memcpy(buffer_out, "-KO No module at address", 24);
+				iReturn += 24;
+			}
+			pthread_mutex_unlock(&m_conf);
+		}
+		else
+		{
+			memcpy(buffer_out, "-KO Wrong address", 17);
+			iReturn += 17;
+		}
+	}
+	else if (strncmp(message, "DO_SETDIMOUT ", 13) == 0)
+	{
+		int iAddr = -1;
+		int iOutput = -1;
+		int iValue = 0;
+		sscanf(message, "DO_SETDIMOUT %02x %02x %d", &iAddr, &iOutput, &iValue);
+		if (iAddr > 7 && iAddr < 0x77)
+		{
+			pthread_mutex_lock(&m_conf);
+			cConfModule* mod = conf->Modules.find(iAddr)->second;
+			IConfModuleDimmableOutputs* modDim = dynamic_cast<IConfModuleDimmableOutputs*>(mod);
+			if (modDim != 0)
+			{
+				if (modDim->setDimmableOutput(iOutput, (uint8_t)iValue))
+				{
+					memcpy(buffer_out, "+OK", 3);
+					iReturn += 3;
+				}
+				else
+				{
+					memcpy(buffer_out, "-KO Error writing to module", 27);
+					iReturn += 27;
+				}
 			}
 			else
 			{

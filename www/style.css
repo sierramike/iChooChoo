@@ -80,6 +80,10 @@ th, td {
 	border-bottom: #000 1px solid;
 }
 
+.statuscol {
+	width: 450px;
+	text-align: center;
+}
 
 .wrapper {
 	width: 960px;
@@ -178,4 +182,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .col-1-2 {
 	width: 50%;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active {
+	background: #27a7c5 !important;
+}
+
+.custom-handle {
+	width: 3em !important;
+	height: 1.2em !important;
+	top: 50% !important;
+	margin-top: -.6em !important;
+	text-align: center !important;
+	line-height: 1.2em !important;
 }

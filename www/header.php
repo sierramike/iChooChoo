@@ -8,6 +8,9 @@ require_once 'functions.php';
 	<title><?php echo $g_title . ' - ' . $g_appname; ?></title>
 	<link rel="stylesheet" id="appstyle" href="<?php echo $g_root; ?>/style.css">
 	<link rel="stylesheet" id="gfonts" href="https://fonts.googleapis.com/css?family=Sanchez:400,400italic|Maven+Pro:400,700" type='text/css'>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
 <header class="main-header">

@@ -9,5 +9,7 @@ class cConfModuleTraction : public cConfModule
 		cConfModuleTraction();
 		~cConfModuleTraction();
 
+		virtual int writeStatus(char* buffer) override;
+
 	private:
 };

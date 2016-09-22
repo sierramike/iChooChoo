@@ -11,3 +11,10 @@ cConfModuleTraction::cConfModuleTraction()
 cConfModuleTraction::~cConfModuleTraction()
 {
 }
+
+int cConfModuleTraction::writeStatus(char* buffer)
+{
+	int iReturn = 0;
+
+	return iReturn;
+}

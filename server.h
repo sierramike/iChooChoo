@@ -2,6 +2,7 @@
 
 #include "main.h"
 #include "IConfModuleOnOffOutputs.hpp"
+#include "IConfModuleDimmableOutputs.hpp"
 
 void* ServerThread(void* ptr);
 bool CheckMessage (char* message, int size);
