@@ -186,7 +186,7 @@ int ProcessArguments(int argc, char* argv[])
 
 	if (iGetIdent)
 	{
-		struct ModuleIdent mi = ModConfGetIdent(iGetIdent);
+/*		struct ModuleIdent mi = ModConfGetIdent(iGetIdent);
 		if (mi.InfoPresent)
 		{
 			printf("\n");
@@ -194,6 +194,16 @@ int ProcessArguments(int argc, char* argv[])
 			printf("    Address     : %#02x\n", mi.Address);
 			printf("    Type        : %#02x\n", mi.Type);
 			printf("    Description : %s\n", mi.Description);
+			printf("\n");
+		}*/
+		cConfModule* module = conf->Modules[iGetIdent];
+		if (module != 0)
+		{
+			printf("\n");
+			printf("    Version     : %d.%d.%d\n", module->getMajor(), module->getMinor(), module->getBuild());
+			printf("    Address     : %#02x\n", iGetIdent);
+			printf("    Type        : %#02x\n", module->getType());
+			printf("    Description : %s\n", module->getDescription());
 			printf("\n");
 		}
 		iReturn = 1;
