@@ -262,10 +262,12 @@ int ProcessMessage(char* message, char* buffer_out)
 		for(it_mod iterator = conf->Modules.begin(); iterator != conf->Modules.end(); ++iterator)
 		{
 			cConfModule* ccMod = iterator->second;
+			cout << (long)ccMod;
+			iReturn += sprintf(buffer_out + iReturn, " 0A 0.30.0 20 ?");
 //			iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x %s", ccMod->getID(), ccMod->getMajor(), ccMod->getMinor(),
 //				ccMod->getBuild(), ccMod->getType(), (strlen(ccMod->getDescription()) == 0 ? "?" : ccMod->getDescription()));
-			iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x ?", ccMod->getID(), ccMod->getMajor(), ccMod->getMinor(),
-				ccMod->getBuild(), ccMod->getType());
+//			iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x ?", ccMod->getID(), ccMod->getMajor(), ccMod->getMinor(),
+//				ccMod->getBuild(), ccMod->getType());
 		}
 		pthread_mutex_unlock(&m_conf);
 	}

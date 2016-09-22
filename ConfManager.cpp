@@ -17,7 +17,7 @@ bool ConfManager::ReadConf(const char* path)
 	int iLine = 0;
 
 	ScanBus();
-	
+
 	ifstream myfile(path);
 	if (myfile.is_open())
 	{
@@ -279,7 +279,7 @@ cConfModule* ConfManager::ConfModuleFactory(int type)
 int ConfManager::ScanBus()
 {
 	ClearModules();
-	
+
 	uint8_t* moduleList = (uint8_t*)calloc(0x78, sizeof(uint8_t));
 	int iNbModules = BICCP_ScanBus(moduleList);
 
@@ -307,6 +307,7 @@ int ConfManager::ScanBus()
 				ccMod->setID(l);
 				Modules[l] = ccMod;
 			}
+			cout << Modules[l]->getID() << "\n";
 			i++;
 		}
 	}
@@ -344,7 +345,7 @@ cConfModule* ConfManager::GetModuleIdent(int addr)
 			module->setMajor(iMajor);
 			module->setMinor(iMinor);
 			module->setBuild(iBuild);
-			
+
 			char cDescription[DESCSIZE + 1];
 			memcpy(cDescription, answer.Data + 2, DESCSIZE);
 			cDescription[DESCSIZE] = 0;
