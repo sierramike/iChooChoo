@@ -283,8 +283,8 @@ int ConfManager::ScanBus()
 	uint8_t* moduleList = (uint8_t*)calloc(0x78, sizeof(uint8_t));
 	int iNbModules = BICCP_ScanBus(moduleList);
 
-	*list = (struct ModuleIdent*)calloc(iNbModules, sizeof(struct ModuleIdent));
-	struct ModuleIdent* myList = *list;
+	//*list = (struct ModuleIdent*)calloc(iNbModules, sizeof(struct ModuleIdent));
+	//struct ModuleIdent* myList = *list;
 	int i = 0;
 	for (int l = 0; l < 0x78; l++)
 	{
