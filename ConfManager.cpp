@@ -278,6 +278,8 @@ cConfModule* ConfManager::ConfModuleFactory(int type)
 
 int ConfManager::ScanBus()
 {
+	ClearModules();
+	
 	uint8_t* moduleList = (uint8_t*)calloc(0x78, sizeof(uint8_t));
 	int iNbModules = BICCP_ScanBus(moduleList);
 
@@ -306,6 +308,18 @@ int ConfManager::ScanBus()
 	free(moduleList);
 
 	return i;
+}
+
+void ConfManager::ClearModules()
+{
+	typedef std::map<int, cConfModule*>::iterator it_mod;
+	for(it_mod iterator = Modules.begin(); iterator != Modules.end(); ++iterator)
+	{
+		cConfModule* ccMod = iterator->second;
+		delete ccMod;
+		iterator->second = 0;
+	}
+	conf->Modules.clear();
 }
 
 cConfModule* ConfManager::GetModuleIdent(int addr)

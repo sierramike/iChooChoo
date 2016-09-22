@@ -90,10 +90,13 @@ int ProcessMessage(char* message, char* buffer_out)
 	}
 	else if (strncmp(message, "DO_RESCAN\n", 10) == 0)
 	{
-		pthread_mutex_lock(&m_moduleList);
-		free(_moduleList);
-		_iModuleList = ScanBus(&_moduleList);
-		pthread_mutex_unlock(&m_moduleList);
+		pthread_mutex_lock(&m_conf);
+		conf->ScanBus();
+		pthread_mutex_unlock(&m_conf);
+//		pthread_mutex_lock(&m_moduleList);
+//		free(_moduleList);
+//		_iModuleList = ScanBus(&_moduleList);
+//		pthread_mutex_unlock(&m_moduleList);
 
 		memcpy(buffer_out, "+OK", 3);
 		iReturn += 3;
@@ -221,18 +224,20 @@ int ProcessMessage(char* message, char* buffer_out)
 		sscanf(message, "GET_MODULE %02x", &iAddr);
 		if (iAddr > 7 && iAddr < 0x77)
 		{
-			ModuleIdent* mi = GetModuleIdent(iAddr);
-			if (mi != 0)
+			//ModuleIdent* mi = GetModuleIdent(iAddr);
+			//if (mi != 0)
+			cConfModule* ccMod = conf->Modules[iAddr];
+			if (ccMod != 0)
 			{
-				pthread_mutex_lock(&m_moduleList);
+				pthread_mutex_lock(&m_conf);
 				memcpy(buffer_out, "+OK", 3);
 				iReturn += 3;
 				iReturn += sprintf(buffer_out + iReturn, " 1");
 
-				iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x %s", mi->Address, mi->Major, mi->Minor,
-					mi->Build, mi->Type, (strlen(mi->Description) == 0 ? "?" : mi->Description));
+				iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x %s", iAddr, ccMod->getMajor(), ccMod->getMinor(),
+					ccMod->getBuild(), ccMod->getType(), (strlen(ccMod->getDescription()) == 0 ? "?" : ccMod->getDescription()));
 
-				pthread_mutex_unlock(&m_moduleList);
+				pthread_mutex_unlock(&m_conf);
 			}
 			else
 			{
@@ -248,16 +253,19 @@ int ProcessMessage(char* message, char* buffer_out)
 	}
 	else if (strncmp(message, "GET_MODULELIST\n", 15) == 0)
 	{
-		pthread_mutex_lock(&m_moduleList);
+		pthread_mutex_lock(&m_conf);
 		memcpy(buffer_out, "+OK", 3);
 		iReturn += 3;
-		iReturn += sprintf(buffer_out + iReturn, " %d", _iModuleList);
-		for (int i = 0; i < _iModuleList; i++)
+		iReturn += sprintf(buffer_out + iReturn, " %d", conf->Modules.size());
+
+		typedef std::map<int, cConfModule*>::iterator it_mod;
+		for(it_mod iterator = Modules.begin(); iterator != Modules.end(); ++iterator)
 		{
-			iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x %s", _moduleList[i].Address, _moduleList[i].Major, _moduleList[i].Minor,
-				_moduleList[i].Build, _moduleList[i].Type, (strlen(_moduleList[i].Description) == 0 ? "?" : _moduleList[i].Description));
+			cConfModule* ccMod = iterator->second;
+			iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x %s", ccMod->getID(), ccMod->getMajor(), ccMod->getMinor(),
+				ccMod->getBuild(), ccMod->getType(), (strlen(ccMod->getDescription()) == 0 ? "?" : ccMod->getDescription()));
 		}
-		pthread_mutex_unlock(&m_moduleList);
+		pthread_mutex_unlock(&m_conf);
 	}
 	else if (strncmp(message, "SET_ADDR ", 9) == 0)
 	{
@@ -323,7 +331,7 @@ int ProcessMessage(char* message, char* buffer_out)
 	return iReturn;
 }
 
-ModuleIdent* GetModuleIdent(int addr)
+/*ModuleIdent* GetModuleIdent(int addr)
 {
 	for (int i = 0; i < _iModuleList; i++)
 	{
@@ -331,4 +339,4 @@ ModuleIdent* GetModuleIdent(int addr)
 			return &(_moduleList[i]);
 	}
 	return 0;
-}
+}*/

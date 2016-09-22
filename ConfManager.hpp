@@ -21,6 +21,7 @@ class ConfManager
 		~ConfManager();
 		bool ReadConf(const char* path);
 		void Display(std::ostream &os);
+		int ScanBus();
 
 		map<int, cConfPosition*> Positions;
 		map<int, cConfModule*> Modules;
@@ -30,7 +31,7 @@ class ConfManager
 		map<int, cConfSensor*> Sensors;
 
 	private:
+		void ClearModules();
 		cConfModule* ConfModuleFactory(int type);
 		cConfModule* GetModuleIdent(int addr);
-		int ScanBus();
 };
