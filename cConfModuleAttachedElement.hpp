@@ -9,12 +9,12 @@ class cConfModuleAttachedElement : public cConfElement
 	public:
 		cConfModuleAttachedElement();
 		~cConfModuleAttachedElement();
-		virtual void setModule(cConfModule* module);
-		virtual cConfModule* getModule();
+		virtual void setModule(int module);
+		virtual int getModule();
 		virtual void setIOPort(int iOPort);
 		virtual int getIOPort();
 
 	private:
-		cConfModule* _module;
+		int _iModule;
 		int _cIOPort;
 };

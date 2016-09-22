@@ -13,14 +13,14 @@ cConfModuleAttachedElement::~cConfModuleAttachedElement()
 {
 }
 
-void cConfModuleAttachedElement::setModule(cConfModule* module)
+void cConfModuleAttachedElement::setModule(int module)
 {
-	this->_module = module;
+	this->_iModule = module;
 }
 
-cConfModule* cConfModuleAttachedElement::getModule()
+int cConfModuleAttachedElement::getModule()
 {
-	return this->_module;
+	return this->_iModule;
 }
 
 void cConfModuleAttachedElement::setIOPort(int iOPort)

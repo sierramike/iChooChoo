@@ -90,7 +90,7 @@ bool ConfManager::ReadConf(const char* path)
 						{
 							cConfSection *ccSec = new cConfSection();
 							ccSec->setID(iID);
-							ccSec->setModule(Modules[iModuleAddr]);
+							ccSec->setModule(iModuleAddr);
 							ccSec->setIOPort(iOutput);
 							ccSec->setDescription(sDesc);
 							Sections[iID] = ccSec;
@@ -114,7 +114,7 @@ bool ConfManager::ReadConf(const char* path)
 						{
 							cConfSwitch *ccSwi = new cConfSwitch();
 							ccSwi->setID(iID);
-							ccSwi->setModule(Modules[iModuleAddr]);
+							ccSwi->setModule(iModuleAddr);
 							ccSwi->setIOPort(iOutput);
 							ccSwi->setStraightValue(iStraightValue);
 							ccSwi->setDescription(sDesc);
@@ -138,7 +138,7 @@ bool ConfManager::ReadConf(const char* path)
 						{
 							cConfRelay *ccRel = new cConfRelay();
 							ccRel->setID(iID);
-							ccRel->setModule(Modules[iModuleAddr]);
+							ccRel->setModule(iModuleAddr);
 							ccRel->setIOPort(iOutput);
 							ccRel->setDescription(sDesc);
 							Relays[iID] = ccRel;
@@ -162,7 +162,7 @@ bool ConfManager::ReadConf(const char* path)
 						{
 							cConfSensor *ccSen = new cConfSensor();
 							ccSen->setID(iID);
-							ccSen->setModule(Modules[iModuleAddr]);
+							ccSen->setModule(iModuleAddr);
 							ccSen->setIOPort(iOutput);
 							ccSen->setType(iType);
 							ccSen->setDescription(sDesc);
@@ -227,7 +227,7 @@ void ConfManager::Display(std::ostream &os)
 	for(it_sec iterator = Sections.begin(); iterator != Sections.end(); ++iterator)
 	{
 		cConfSection* ccSec = iterator->second;
-		os << "SECTION " << std::hex << std::uppercase << ccSec->getID() << " " << std::hex << std::uppercase << ccSec->getModule()->getID()
+		os << "SECTION " << std::hex << std::uppercase << ccSec->getID() << " " << std::hex << std::uppercase << ccSec->getModule()
 			 << " " << std::hex << ccSec->getIOPort() << " " << ccSec->getDescription() << "\n";
 	}
 
@@ -237,7 +237,7 @@ void ConfManager::Display(std::ostream &os)
 	for(it_swi iterator = Switchs.begin(); iterator != Switchs.end(); ++iterator)
 	{
 		cConfSwitch* ccSwi = iterator->second;
-		os << "SWITCH " << std::hex << std::uppercase << ccSwi->getID() << " " << std::hex << std::uppercase << ccSwi->getModule()->getID()
+		os << "SWITCH " << std::hex << std::uppercase << ccSwi->getID() << " " << std::hex << std::uppercase << ccSwi->getModule()
 			 << " " << std::hex << ccSwi->getIOPort() << " " << ccSwi->getStraightValue() << " " << ccSwi->getDescription() << "\n";
 	}
 
@@ -247,7 +247,7 @@ void ConfManager::Display(std::ostream &os)
 	for(it_rel iterator = Relays.begin(); iterator != Relays.end(); ++iterator)
 	{
 		cConfRelay* ccRel = iterator->second;
-		os << "RELAY " << std::hex << std::uppercase << ccRel->getID() << " " << std::hex << std::uppercase << ccRel->getModule()->getID()
+		os << "RELAY " << std::hex << std::uppercase << ccRel->getID() << " " << std::hex << std::uppercase << ccRel->getModule()
 			 << " " << std::hex << ccRel->getIOPort() << " " << ccRel->getDescription() << "\n";
 	}
 
@@ -257,7 +257,7 @@ void ConfManager::Display(std::ostream &os)
 	for(it_sen iterator = Sensors.begin(); iterator != Sensors.end(); ++iterator)
 	{
 		cConfSensor* ccSen = iterator->second;
-		os << "SENSOR " << std::hex << std::uppercase << ccSen->getID() << " " << std::hex << std::uppercase << ccSen->getModule()->getID()
+		os << "SENSOR " << std::hex << std::uppercase << ccSen->getID() << " " << std::hex << std::uppercase << ccSen->getModule()
 			 << " " << std::hex << ccSen->getIOPort() << " " << std::hex << std::uppercase << ccSen->getType() << " " << ccSen->getDescription() << "\n";
 	}
 }
