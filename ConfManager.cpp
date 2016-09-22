@@ -301,6 +301,12 @@ int ConfManager::ScanBus()
 				ccMod->setID(l);
 				Modules[l] = ccMod;
 			}
+			else
+			{
+				ccMod = new cConfModule();
+				ccMod->setID(l);
+				Modules[l] = ccMod;
+			}
 			i++;
 		}
 	}
@@ -326,7 +332,6 @@ cConfModule* ConfManager::GetModuleIdent(int addr)
 {
 	cConfModule* module = 0;
 	union BICCP_Data answer;
-	int iSuccess = 0;
 
 	if(RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_VERSION, 0))
 	{
@@ -344,15 +349,10 @@ cConfModule* ConfManager::GetModuleIdent(int addr)
 			memcpy(cDescription, answer.Data + 2, DESCSIZE);
 			cDescription[DESCSIZE] = 0;
 			module->setDescription((const char*)&cDescription);
-			iSuccess = true;
 		}
-		else
-			module = new cConfModule();
 	}
-	else
-		module = new cConfModule();
 
-	LogMessage(iSuccess, (char*)"Module identification", addr);
+	LogMessage((module != 0), (char*)"Module identification", addr);
 
 	return module;
 }
