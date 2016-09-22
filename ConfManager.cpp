@@ -58,27 +58,6 @@ bool ConfManager::ReadConf(const char* path)
 						}
 						free(sDesc);
 					}
-//					else if (line.compare(0, 7, "MODULE ") == 0)
-//					{
-//						int iID = -1;
-//						int iType = -1;
-//						char* sDesc;
-//						sscanf(line.c_str(), "MODULE %02x %02x %ms", &iID, &iType, &sDesc);
-//						if (iID > -1 && iType > -1)
-//						{
-//							cConfModule *ccMod = ConfModuleFactory(iType); // new cConfModule();
-//							ccMod->setID(iID);
-//							//ccMod->setType(iType);
-//							ccMod->setDescription(sDesc);
-//							Modules[iID] = ccMod;
-//						}
-//						else
-//						{
-//							bReturn = false;
-//							printf("Configuration error: syntax error at line %d '%s'\n", iLine, line.c_str());
-//						}
-//						free(sDesc);
-//					}
 					else if (line.compare(0, 8, "SECTION ") == 0)
 					{
 						int iID = -1;
@@ -212,15 +191,6 @@ void ConfManager::Display(std::ostream &os)
 		os << "POSITION " << std::hex << std::uppercase << ccPos->getID() << " " << ccPos->getDescription() << "\n";
 	}
 
-//	os << "\n";
-//	os << "#MODULE ID TYPE DESCRIPTION\n";
-//	typedef std::map<int, cConfModule*>::iterator it_mod;
-//	for(it_mod iterator = Modules.begin(); iterator != Modules.end(); ++iterator)
-//	{
-//		cConfModule* ccMod = iterator->second;
-//		os << "MODULE " << std::hex << std::uppercase << ccMod->getID() << " " << std::hex << std::uppercase << ccMod->getType() << " " << ccMod->getDescription() << "\n";
-//	}
-
 	os << "\n";
 	os << "#SECTION ID MODULE_ID OUTPUT DESCRIPTION\n";
 	typedef std::map<int, cConfSection*>::iterator it_sec;
@@ -283,8 +253,6 @@ int ConfManager::ScanBus()
 	uint8_t* moduleList = (uint8_t*)calloc(0x78, sizeof(uint8_t));
 	int iNbModules = BICCP_ScanBus(moduleList);
 
-	//*list = (struct ModuleIdent*)calloc(iNbModules, sizeof(struct ModuleIdent));
-	//struct ModuleIdent* myList = *list;
 	int i = 0;
 	for (int l = 0; l < 0x78; l++)
 	{
@@ -307,7 +275,6 @@ int ConfManager::ScanBus()
 				ccMod->setID(l);
 				Modules[l] = ccMod;
 			}
-			cout << Modules[l]->getID() << "\n";
 			i++;
 		}
 	}

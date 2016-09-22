@@ -3,69 +3,6 @@
 #include "biccp.h"
 #include "log.h"
 
-/*int ScanBus(struct ModuleIdent** list)
-{
-	uint8_t* moduleList = (uint8_t*)calloc(0x78, sizeof(uint8_t));
-	int iNbModules = BICCP_ScanBus(moduleList);
-
-	*list = (struct ModuleIdent*)calloc(iNbModules, sizeof(struct ModuleIdent));
-	struct ModuleIdent* myList = *list;
-	int i = 0;
-	for (int l = 0; l < 0x78; l++)
-	{
-		if (moduleList[l] > 0)
-		{
-			ModConfGetIdent2(l, &myList[i]);
-			usleep(10000);
-			ModConfGetIdent2(l, &myList[i]);
-			i++;
-		}
-	}
-
-	free(moduleList);
-
-	return i;
-}*/
-
-/*struct ModuleIdent ModConfGetIdent(int addr)
-{
-	struct ModuleIdent mi;
-	ModConfGetIdent2(addr, &mi);
-	return mi;
-}*/
-
-/*int ModConfGetIdent2(int addr, struct ModuleIdent* mi)
-{
-	int iReturn = 0;
-	union BICCP_Data answer;
-
-	mi->Address = addr;
-
-	if(RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_VERSION, 0))
-	{
-		mi->Major = answer.Data[0];
-		mi->Minor = answer.Data[1];
-		mi->Build = answer.Data[2];
-		if (RequestToModule(addr, &answer, BICCP_GRP_CONF, BICCP_CMD_CONF_IDENT, 0))
-		{
-			mi->InfoPresent = true;
-			mi->Address = answer.Data[0];
-			mi->Type = answer.Data[1];
-			memcpy(mi->Description, answer.Data + 2, DESCSIZE);
-			mi->Description[DESCSIZE] = 0;
-			iReturn = true;
-		}
-		else
-			mi->InfoPresent = false;
-	}
-	else
-		mi->InfoPresent = false;
-
-	LogMessage(iReturn, (char*)"Module identification", addr);
-
-	return iReturn;
-}*/
-
 int ModConfSetAddress(int addr, uint8_t newaddr)
 {
 	int iReturn = 0;

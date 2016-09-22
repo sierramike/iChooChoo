@@ -92,7 +92,4 @@ int start_daemon()
 
 void init_daemon()
 {
-//	pthread_mutex_lock(&m_moduleList);
-//	_iModuleList = ScanBus(&_moduleList);
-//	pthread_mutex_unlock(&m_moduleList);
 }

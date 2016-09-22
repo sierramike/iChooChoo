@@ -40,16 +40,9 @@ void init_daemon();
 #include <string.h>
 #include <pthread.h>
 
-//#include "modconf.h"
-
-//extern struct ModuleIdent* _moduleList;
-//extern int _iModuleList;
-//extern pthread_mutex_t m_moduleList;
-
 typedef struct
 {
 	int sock;
 	struct sockaddr address;
 	socklen_t addr_len;
-//	int addr_len;
 } connection_t;

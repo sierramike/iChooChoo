@@ -15,7 +15,7 @@
 #include <string.h>
 
 #define PROG_VERSION_MAJ 0
-#define PROG_VERSION_MIN 30
+#define PROG_VERSION_MIN 35
 #define PROG_VERSION_BLD 0
 
 // Data size if Packet size - 4
@@ -24,14 +24,14 @@
 #define DESCSIZE 14
 
 // Global Structs
-struct ModuleIdent
-{
-	int InfoPresent;
-	int Major;
-	int Minor;
-	int Build;
-	int Address;
-	int Type;
-	char Description[DESCSIZE + 1];
-};
+//struct ModuleIdent
+//{
+	//int InfoPresent;
+	//int Major;
+	//int Minor;
+	//int Build;
+	//int Address;
+	//int Type;
+	//char Description[DESCSIZE + 1];
+//};
 

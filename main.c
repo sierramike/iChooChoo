@@ -165,10 +165,6 @@ int ProcessArguments(int argc, char* argv[])
 
 	if (bScan)
 	{
-//		struct ModuleIdent* list;
-//		int iNbModules = ScanBus(&list);
-//		PrintModuleList(list, iNbModules);
-//		free(list);
 		PrintModuleList();
 		iReturn = 1;
 	}
@@ -186,16 +182,6 @@ int ProcessArguments(int argc, char* argv[])
 
 	if (iGetIdent)
 	{
-/*		struct ModuleIdent mi = ModConfGetIdent(iGetIdent);
-		if (mi.InfoPresent)
-		{
-			printf("\n");
-			printf("    Version     : %d.%d.%d\n", mi.Major, mi.Minor, mi.Build);
-			printf("    Address     : %#02x\n", mi.Address);
-			printf("    Type        : %#02x\n", mi.Type);
-			printf("    Description : %s\n", mi.Description);
-			printf("\n");
-		}*/
 		cConfModule* module = conf->Modules[iGetIdent];
 		if (module != 0)
 		{
@@ -282,34 +268,6 @@ int CheckArgumentGetByte(int argc, char* argv[], int argi, char* argname, int np
 		}
 	}
 	return iReturn;
-}
-
-void PrintModuleList(struct ModuleIdent* list, int iNbModules)
-{
-	printf("\nBus scan complete: %d modules found.\n\n", iNbModules);
-	printf("+---------+----------+------+----------------+\n");
-	printf("| Address | Version  | Type | Description    |\n");
-	printf("+---------+----------+------+----------------+\n");
-	for (int i = 0; i < iNbModules; i++)
-	{
-		char buf[9] = "        ";
-		if (list[i].InfoPresent)
-		{
-			char line[] = "| 0x%02x    |          | 0x%02x |                |\n";
-			sprintf(buf, "%d.%d.%d", list[i].Major, list[i].Minor, list[i].Build);
-			memcpy(line + 14, buf, strlen(buf));
-			if (list[i].Address == 0x77)
-				memcpy(line + 34, "(new module)", 12);
-			else
-				memcpy(line + 34, list[i].Description, strlen(list[i].Description));
-			printf(line, list[i].Address, list[i].Type);
-		}
-		else
-		{
-			printf("| 0x%02x    |    --    |  --  | (unidentified) |\n", list[i].Address);
-		}
-	}
-	printf("+---------+----------+------+----------------+\n");
 }
 
 void PrintModuleList()

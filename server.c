@@ -93,10 +93,6 @@ int ProcessMessage(char* message, char* buffer_out)
 		pthread_mutex_lock(&m_conf);
 		conf->ScanBus();
 		pthread_mutex_unlock(&m_conf);
-//		pthread_mutex_lock(&m_moduleList);
-//		free(_moduleList);
-//		_iModuleList = ScanBus(&_moduleList);
-//		pthread_mutex_unlock(&m_moduleList);
 
 		memcpy(buffer_out, "+OK", 3);
 		iReturn += 3;
@@ -224,26 +220,23 @@ int ProcessMessage(char* message, char* buffer_out)
 		sscanf(message, "GET_MODULE %02x", &iAddr);
 		if (iAddr > 7 && iAddr < 0x77)
 		{
-			//ModuleIdent* mi = GetModuleIdent(iAddr);
-			//if (mi != 0)
+			pthread_mutex_lock(&m_conf);
 			cConfModule* ccMod = conf->Modules[iAddr];
 			if (ccMod != 0)
 			{
-				pthread_mutex_lock(&m_conf);
 				memcpy(buffer_out, "+OK", 3);
 				iReturn += 3;
 				iReturn += sprintf(buffer_out + iReturn, " 1");
 
 				iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x %s", iAddr, ccMod->getMajor(), ccMod->getMinor(),
 					ccMod->getBuild(), ccMod->getType(), (strlen(ccMod->getDescription()) == 0 ? "?" : ccMod->getDescription()));
-
-				pthread_mutex_unlock(&m_conf);
 			}
 			else
 			{
 				memcpy(buffer_out, "-KO No module at address", 24);
 				iReturn += 24;
 			}
+			pthread_mutex_unlock(&m_conf);
 		}
 		else
 		{
@@ -262,12 +255,8 @@ int ProcessMessage(char* message, char* buffer_out)
 		for(it_mod iterator = conf->Modules.begin(); iterator != conf->Modules.end(); ++iterator)
 		{
 			cConfModule* ccMod = iterator->second;
-			cout << (long)ccMod;
-			iReturn += sprintf(buffer_out + iReturn, " 0A 0.30.0 20 ?");
-//			iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x %s", ccMod->getID(), ccMod->getMajor(), ccMod->getMinor(),
-//				ccMod->getBuild(), ccMod->getType(), (strlen(ccMod->getDescription()) == 0 ? "?" : ccMod->getDescription()));
-//			iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x ?", ccMod->getID(), ccMod->getMajor(), ccMod->getMinor(),
-//				ccMod->getBuild(), ccMod->getType());
+			iReturn += sprintf(buffer_out + iReturn, " %02x %d.%d.%d %02x %s", ccMod->getID(), ccMod->getMajor(), ccMod->getMinor(),
+				ccMod->getBuild(), ccMod->getType(), (strlen(ccMod->getDescription()) == 0 ? "?" : ccMod->getDescription()));
 		}
 		pthread_mutex_unlock(&m_conf);
 	}
@@ -334,13 +323,3 @@ int ProcessMessage(char* message, char* buffer_out)
 	buffer_out[iReturn] = 0;
 	return iReturn;
 }
-
-/*ModuleIdent* GetModuleIdent(int addr)
-{
-	for (int i = 0; i < _iModuleList; i++)
-	{
-		if (_moduleList[i].Address == addr)
-			return &(_moduleList[i]);
-	}
-	return 0;
-}*/
